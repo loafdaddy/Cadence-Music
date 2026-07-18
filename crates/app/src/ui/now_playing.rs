@@ -12,6 +12,8 @@ use super::{artwork_frame, format_duration_ms, set_artwork_file};
 
 const DISC_SIZE: i32 = 160;
 const ART_SIZE: i32 = 110;
+const STAGE_W: i32 = 220;
+const STAGE_H: i32 = 180;
 
 /// Full-window overlay for focused listening.
 pub struct NowPlaying {
@@ -24,7 +26,7 @@ pub struct NowPlaying {
     title: gtk::Label,
     subtitle: gtk::Label,
     artwork: gtk::Picture,
-    disc: gtk::Box,
+    disc: gtk::Fixed,
     tonearm: gtk::DrawingArea,
     position_label: gtk::Label,
     duration_label: gtk::Label,
@@ -74,20 +76,18 @@ impl NowPlaying {
         let (art_frame, artwork) = artwork_frame(ART_SIZE, &["cadence-vinyl-label"]);
         art_frame.remove_css_class("cadence-art-square");
         art_frame.add_css_class("cadence-vinyl-art-wrap");
-        art_frame.set_halign(gtk::Align::Center);
-        art_frame.set_valign(gtk::Align::Center);
-        art_frame.set_margin_top(25);
-        art_frame.set_margin_bottom(25);
-        art_frame.set_margin_start(25);
-        art_frame.set_margin_end(25);
 
-        let disc = gtk::Box::new(gtk::Orientation::Vertical, 0);
+        // Disc is a Fixed square: artwork margins/natural size cannot enlarge it.
+        let disc = gtk::Fixed::new();
         disc.add_css_class("cadence-vinyl-disc");
         disc.set_halign(gtk::Align::Center);
         disc.set_valign(gtk::Align::Center);
         disc.set_size_request(DISC_SIZE, DISC_SIZE);
+        disc.set_hexpand(false);
+        disc.set_vexpand(false);
         disc.set_overflow(gtk::Overflow::Hidden);
-        disc.append(&art_frame);
+        let inset = ((DISC_SIZE - ART_SIZE) / 2) as f64;
+        disc.put(&art_frame, inset, inset);
 
         let tonearm = gtk::DrawingArea::builder()
             .content_width(90)
@@ -102,9 +102,13 @@ impl NowPlaying {
             draw_tonearm(cr, w as f64, h as f64, false);
         });
 
+        // Stage is also Fixed so the tonearm overlay cannot inflate layout.
         let stage = gtk::Overlay::new();
         stage.set_halign(gtk::Align::Center);
-        stage.set_size_request(220, 180);
+        stage.set_hexpand(false);
+        stage.set_vexpand(false);
+        stage.set_size_request(STAGE_W, STAGE_H);
+        stage.set_overflow(gtk::Overflow::Hidden);
         stage.set_child(Some(&disc));
         stage.add_overlay(&tonearm);
 
@@ -113,6 +117,8 @@ impl NowPlaying {
             .wrap(true)
             .justify(gtk::Justification::Center)
             .halign(gtk::Align::Center)
+            .max_width_chars(40)
+            .ellipsize(gtk::pango::EllipsizeMode::End)
             .css_classes(["title-2"])
             .build();
         let subtitle = gtk::Label::builder()
@@ -120,6 +126,8 @@ impl NowPlaying {
             .wrap(true)
             .justify(gtk::Justification::Center)
             .halign(gtk::Align::Center)
+            .max_width_chars(48)
+            .ellipsize(gtk::pango::EllipsizeMode::End)
             .css_classes(["dim-label"])
             .build();
 

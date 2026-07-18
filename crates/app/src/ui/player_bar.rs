@@ -10,6 +10,7 @@ use gtk::{gdk, glib};
 use super::{artwork_frame, format_duration_ms, set_artwork_file};
 
 const ART_SIZE: i32 = 72;
+const DOCK_HEIGHT: i32 = 96;
 
 /// Bottom playback dock (~100px). Click artwork to open Now Playing.
 pub struct PlayerBar {
@@ -176,7 +177,7 @@ impl PlayerBar {
         widget.set_vexpand(false);
         widget.set_valign(gtk::Align::End);
         // Fixed dock height: request is a floor; overflow + CSS max-height clamp growth.
-        widget.set_size_request(-1, 96);
+        widget.set_size_request(-1, DOCK_HEIGHT);
         widget.set_overflow(gtk::Overflow::Hidden);
         widget.append(&left);
         widget.append(&center);
