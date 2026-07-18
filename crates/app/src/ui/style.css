@@ -1,0 +1,130 @@
+/* Cadence — restrained polish on Adwaita */
+
+.cadence-player {
+  min-height: 96px;
+  background-color: alpha(@window_bg_color, 0.94);
+  border-top: 1px solid alpha(@borders, 0.55);
+}
+
+.cadence-dock-art {
+  border-radius: 8px;
+}
+
+.cadence-dock-art-btn {
+  padding: 0;
+  min-width: 72px;
+  min-height: 72px;
+}
+
+.cadence-artwork {
+  border-radius: 8px;
+}
+
+.cadence-play {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.cadence-seek trough,
+.cadence-volume trough {
+  min-height: 4px;
+  border-radius: 999px;
+}
+
+.cadence-seek highlight,
+.cadence-volume highlight {
+  border-radius: 999px;
+  background-color: @accent_bg_color;
+}
+
+.cadence-sidebar {
+  background-color: @sidebar_bg_color;
+}
+
+.cadence-master {
+  min-width: 260px;
+}
+
+.cadence-home-section {
+  margin: 12px 0 6px 0;
+}
+
+.cadence-song-row:hover {
+  background-color: alpha(@accent_bg_color, 0.08);
+}
+
+.cadence-album-card {
+  padding: 10px;
+  border-radius: 12px;
+  transition: background-color 150ms ease;
+}
+
+.cadence-album-card:hover {
+  background-color: alpha(@accent_bg_color, 0.08);
+}
+
+.cadence-playing {
+  color: @accent_color;
+  font-weight: 600;
+}
+
+/* Immersive Now Playing */
+.cadence-now-playing {
+  background-color: @window_bg_color;
+}
+
+.cadence-art-square {
+  border-radius: 8px;
+}
+
+.cadence-vinyl-disc {
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at center,
+    alpha(@card_bg_color, 0.0) 0%,
+    alpha(@card_bg_color, 0.0) 36%,
+    #1a1a1a 37%,
+    #2a2a2a 42%,
+    #151515 48%,
+    #2e2e2e 54%,
+    #121212 62%,
+    #262626 70%,
+    #0e0e0e 82%,
+    #1c1c1c 100%
+  );
+  box-shadow: 0 14px 42px alpha(black, 0.4);
+}
+
+.cadence-vinyl-disc.playing {
+  animation: cadence-spin 10s linear infinite;
+}
+
+.cadence-vinyl-art-wrap {
+  border-radius: 999px;
+}
+
+.cadence-vinyl-label {
+  border-radius: 999px;
+}
+
+.cadence-tonearm {
+  opacity: 0.92;
+}
+
+.cadence-context-menu {
+  padding: 6px;
+  min-width: 200px;
+}
+
+.cadence-context-item {
+  padding: 8px 12px;
+}
+
+@keyframes cadence-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

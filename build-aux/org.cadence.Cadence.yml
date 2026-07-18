@@ -1,0 +1,43 @@
+# Flatpak manifest for Cadence.
+# Build: flatpak-builder --user --install --force-clean build-dir build-aux/org.cadence.Cadence.yml
+
+app-id: org.cadence.Cadence
+runtime: org.gnome.Platform
+runtime-version: '48'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: cadence
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --share=network
+  - --talk-name=org.freedesktop.portal.Documents
+  - --talk-name=org.freedesktop.portal.FileChooser
+  - --talk-name=org.freedesktop.portal.OpenURI
+  - --talk-name=org.freedesktop.portal.Notification
+  - --own-name=org.mpris.MediaPlayer2.Cadence
+  # Read-write so metadata edits and organise can update user music files.
+  # Portal-chosen folders outside XDG Music still need document portal grants.
+  - --filesystem=xdg-music:rw
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  env:
+    CARGO_HOME: /run/build/cadence/cargo
+    RUST_BACKTRACE: '1'
+modules:
+  - name: cadence
+    buildsystem: simple
+    build-commands:
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose || cargo fetch --manifest-path Cargo.toml --verbose
+      - cargo --offline build --release --verbose || cargo build --release --verbose
+      - install -Dm755 target/release/cadence /app/bin/cadence
+      - install -Dm644 data/org.cadence.Cadence.desktop /app/share/applications/org.cadence.Cadence.desktop
+      - install -Dm644 data/org.cadence.Cadence.metainfo.xml /app/share/metainfo/org.cadence.Cadence.metainfo.xml
+      - install -Dm644 data/icons/hicolor/scalable/apps/org.cadence.Cadence.svg /app/share/icons/hicolor/scalable/apps/org.cadence.Cadence.svg
+    sources:
+      - type: dir
+        path: ..

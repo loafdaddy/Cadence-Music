@@ -1,0 +1,51 @@
+[workspace]
+resolver = "2"
+members = ["crates/core", "crates/app"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+license = "GPL-3.0-or-later"
+authors = ["The Cadence Contributors"]
+repository = "https://github.com/cadence-music/cadence"
+homepage = "https://github.com/cadence-music/cadence"
+description = "A modern, native music library application for Linux"
+
+[workspace.dependencies]
+anyhow = "1"
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dirs = "6"
+ureq = { version = "3", default-features = true, features = ["json"] }
+urlencoding = "2"
+
+# Core library
+rusqlite = { version = "0.32", features = ["bundled", "backup"] }
+lofty = "0.22"
+walkdir = "2"
+notify = "7"
+rayon = "1"
+sha2 = "0.10"
+
+# GUI / platform
+gtk = { package = "gtk4", version = "0.9", features = ["v4_10"] }
+adw = { package = "libadwaita", version = "0.7", features = ["v1_5"] }
+glib = "0.20"
+gio = "0.20"
+gstreamer = "0.23"
+gstreamer-play = "0.23"
+mpris-server = "0.8"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
+
+# Faster incremental debug builds while keeping dependencies optimized.
+[profile.dev.package."*"]
+opt-level = 2

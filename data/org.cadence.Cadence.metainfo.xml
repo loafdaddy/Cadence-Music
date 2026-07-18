@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.cadence.Cadence</id>
+  <name>Cadence</name>
+  <summary>A modern, native music library for Linux</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer_name>The Cadence Contributors</developer_name>
+  <url type="homepage">https://github.com/cadence-music/cadence</url>
+  <url type="bugtracker">https://github.com/cadence-music/cadence/issues</url>
+  <description>
+    <p>
+      Cadence is a lightweight GTK4 music library application for Linux.
+      It focuses on local files, native performance, and GNOME human interface guidelines.
+    </p>
+    <p>Features include library scanning, browsing, search, playlists, playback, and metadata tools.</p>
+  </description>
+  <launchable type="desktop-id">org.cadence.Cadence.desktop</launchable>
+  <provides>
+    <binary>cadence</binary>
+  </provides>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  <recommends>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </recommends>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="0.1.0" date="2026-07-18">
+      <description>
+        <p>Initial MVP release.</p>
+      </description>
+    </release>
+  </releases>
+</component>
