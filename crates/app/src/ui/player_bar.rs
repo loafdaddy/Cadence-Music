@@ -44,18 +44,27 @@ impl PlayerBar {
             .css_classes(["flat", "cadence-dock-art-btn"])
             .tooltip_text("Now Playing")
             .build();
+        // size_request is a minimum only — also clip so artwork never grows the dock.
         art_button.set_size_request(ART_SIZE, ART_SIZE);
+        art_button.set_hexpand(false);
+        art_button.set_vexpand(false);
+        art_button.set_valign(gtk::Align::Center);
+        art_button.set_overflow(gtk::Overflow::Hidden);
 
         let title = gtk::Label::builder()
             .label("Nothing playing")
             .xalign(0.0)
             .ellipsize(gtk::pango::EllipsizeMode::End)
+            .max_width_chars(28)
+            .hexpand(true)
             .css_classes(["heading"])
             .build();
         let subtitle = gtk::Label::builder()
             .label("Choose something from your library")
             .xalign(0.0)
             .ellipsize(gtk::pango::EllipsizeMode::End)
+            .max_width_chars(36)
+            .hexpand(true)
             .css_classes(["dim-label", "caption"])
             .build();
 
@@ -166,7 +175,9 @@ impl PlayerBar {
         widget.set_hexpand(true);
         widget.set_vexpand(false);
         widget.set_valign(gtk::Align::End);
+        // Fixed dock height: request is a floor; overflow + CSS max-height clamp growth.
         widget.set_size_request(-1, 96);
+        widget.set_overflow(gtk::Overflow::Hidden);
         widget.append(&left);
         widget.append(&center);
         widget.append(&right);
@@ -249,9 +260,9 @@ impl PlayerBar {
         });
 
         if let Some(path) = artwork_path {
-            set_artwork_file(&self.artwork, Some(path));
+            set_artwork_file(&self.artwork, Some(path), ART_SIZE);
         } else {
-            set_artwork_file(&self.artwork, None);
+            set_artwork_file(&self.artwork, None, ART_SIZE);
             set_fallback_art(&self.artwork);
         }
     }
@@ -275,8 +286,7 @@ impl PlayerBar {
         self.duration_label
             .set_label(&format!("-{}", format_duration_ms(Some(remaining))));
         if duration_ms > 0 {
-            self.seek
-                .set_value(position_ms as f64 / duration_ms as f64);
+            self.seek.set_value(position_ms as f64 / duration_ms as f64);
         }
     }
 }

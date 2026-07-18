@@ -260,10 +260,7 @@ impl SearchResults {
 
         if !folders.is_empty() {
             self.content.append(&section_heading("Folders"));
-            let labels: Vec<String> = folders
-                .iter()
-                .map(|p| p.display().to_string())
-                .collect();
+            let labels: Vec<String> = folders.iter().map(|p| p.display().to_string()).collect();
             let list = simple_string_list(&labels);
             let folders = folders.clone();
             let on_folder = Rc::clone(&self.on_folder);
@@ -317,7 +314,7 @@ fn simple_string_list(labels: &[String]) -> gtk::ListBox {
 
 fn album_result_row(album: &Album, artist: &str) -> gtk::ListBoxRow {
     let (art_frame, art) = super::artwork_frame(44, &["card"]);
-    super::set_artwork_file(&art, album.artwork_path.as_deref());
+    super::set_artwork_file(&art, album.artwork_path.as_deref(), 44);
     let title = gtk::Label::builder()
         .label(&album.name)
         .xalign(0.0)

@@ -235,7 +235,7 @@ fn pill_button(label: &str, icon: &str) -> gtk::Button {
 
 fn home_album_card(album: &Album, artist: &str) -> gtk::Box {
     let (frame, picture) = artwork_frame(140, &["card", "cadence-artwork"]);
-    set_artwork_file(&picture, album.artwork_path.as_deref());
+    set_artwork_file(&picture, album.artwork_path.as_deref(), 140);
     let title = gtk::Label::builder()
         .label(&album.name)
         .wrap(false)
@@ -390,7 +390,7 @@ pub fn rich_song_row(
     row_box.append(&num);
     if show_art {
         let (art_frame, art) = artwork_frame(40, &["card"]);
-        set_artwork_file(&art, item.artwork_path.as_deref());
+        set_artwork_file(&art, item.artwork_path.as_deref(), 40);
         row_box.append(&art_frame);
     }
     row_box.append(&text);

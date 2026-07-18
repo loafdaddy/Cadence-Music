@@ -228,9 +228,9 @@ impl NowPlaying {
         self.title.set_label(title);
         self.subtitle.set_label(&format!("{artist}  ·  {album}"));
         if let Some(path) = art {
-            set_artwork_file(&self.artwork, Some(path));
+            set_artwork_file(&self.artwork, Some(path), ART_SIZE);
         } else {
-            set_artwork_file(&self.artwork, None);
+            set_artwork_file(&self.artwork, None, ART_SIZE);
             if let Some(display) = gdk::Display::default() {
                 let p = gtk::IconTheme::for_display(&display).lookup_icon(
                     "folder-music-symbolic",
@@ -273,8 +273,7 @@ impl NowPlaying {
         self.duration_label
             .set_label(&format_duration_ms(Some(duration_ms)));
         if duration_ms > 0 {
-            self.seek
-                .set_value(position_ms as f64 / duration_ms as f64);
+            self.seek.set_value(position_ms as f64 / duration_ms as f64);
         }
     }
 

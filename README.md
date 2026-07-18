@@ -6,17 +6,24 @@ Cadence aims to feel like it ships with Fedora Workstation: **GTK4**, **libadwai
 
 > Windows Media Player (Windows 7 era) + GNOME HIG + modern design + native Linux performance.
 
-## Features (MVP)
+## Features (current)
 
 - Recursive library scanning with live folder watching
-- SQLite-backed library with instant FTS5 search
+- SQLite-backed library with FTS5 search (grouped results: artists, albums, songs, genres, years, folders)
 - Library home, Artists, Albums, Songs, Playlists, Favourites, Recently Added
-- GStreamer playback, queue, shuffle, repeat
+- Compact playback dock + optional Now Playing overlay
+- GStreamer playback with queue, shuffle, and repeat
 - Album artwork extraction and local cache
-- Metadata editing and optional MusicBrainz / Cover Art Archive lookup
+- Single-track metadata editing; optional MusicBrainz / Cover Art Archive lookup (library-wide pass is partial)
 - Non-destructive library organisation with preview and undo
-- MPRIS media-key integration
-- Flatpak packaging
+- MPRIS media keys (play/pause/next/previous; seek not yet wired)
+- Flatpak packaging (manifest present; polish ongoing)
+
+### Not yet
+
+Batch metadata editor, Genres/Years/Folders sidebar browsers, gapless / ReplayGain / crossfade, smart playlists, M3U, mini player, notifications, open-folder.
+
+See [docs/SPEC_CHECKLIST.md](docs/SPEC_CHECKLIST.md) for the full status matrix and [docs/ROADMAP.md](docs/ROADMAP.md) for what’s next.
 
 ## Build
 
@@ -59,6 +66,8 @@ flatpak run org.cadence.Cadence
 | `cadence` | GTK4 / libadwaita UI, GStreamer playback, MPRIS |
 
 The UI never blocks on disk I/O: a dedicated library worker owns the database and talks to the main loop through channels.
+
+More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## License
 

@@ -1,9 +1,13 @@
 //! Right-click context menus for library items.
+//!
+//! Uses `gtk::PopoverMenu` + `gio::Menu` so items pick up native Adwaita
+//! menu styling (no custom button borders / focus rings).
 
 use std::rc::Rc;
 
 use adw::prelude::*;
 use gtk::gdk;
+use gtk::gio;
 
 /// Actions offered on tracks / albums.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -42,39 +46,44 @@ where
     widget.add_controller(gesture);
 }
 
-fn build_popover(on_action: Rc<dyn Fn(ContextAction)>) -> gtk::Popover {
-    let list = gtk::Box::new(gtk::Orientation::Vertical, 0);
-    list.add_css_class("cadence-context-menu");
+fn build_popover(on_action: Rc<dyn Fn(ContextAction)>) -> gtk::PopoverMenu {
+    let menu = gio::Menu::new();
+    menu.append(Some("Add to Queue"), Some("ctx.add-to-queue"));
+    menu.append(Some("Add to Playlist…"), Some("ctx.add-to-playlist"));
+    menu.append(Some("Delete from Library and Disk"), Some("ctx.delete"));
 
-    for (label, action) in [
-        ("Add to queue", ContextAction::AddToQueue),
-        ("Add to playlist…", ContextAction::AddToPlaylist),
-        ("Delete from library and disk", ContextAction::Delete),
-    ] {
-        let btn = gtk::Button::builder()
-            .label(label)
-            .halign(gtk::Align::Start)
-            .css_classes(["flat", "cadence-context-item"])
-            .build();
-        if action == ContextAction::Delete {
-            btn.add_css_class("destructive-action");
-        }
-        let on_action = Rc::clone(&on_action);
-        btn.connect_clicked(move |btn| {
-            if let Some(pop) = btn
-                .ancestor(gtk::Popover::static_type())
-                .and_then(|w| w.downcast::<gtk::Popover>().ok())
-            {
-                pop.popdown();
-            }
-            on_action(action);
-        });
-        list.append(&btn);
-    }
+    let group = gio::SimpleActionGroup::new();
+    add_ctx_action(
+        &group,
+        "add-to-queue",
+        ContextAction::AddToQueue,
+        &on_action,
+    );
+    add_ctx_action(
+        &group,
+        "add-to-playlist",
+        ContextAction::AddToPlaylist,
+        &on_action,
+    );
+    add_ctx_action(&group, "delete", ContextAction::Delete, &on_action);
 
-    gtk::Popover::builder()
-        .autohide(true)
-        .has_arrow(false)
-        .child(&list)
-        .build()
+    let popover = gtk::PopoverMenu::from_model(Some(&menu));
+    popover.set_has_arrow(false);
+    popover.set_autohide(true);
+    popover.insert_action_group("ctx", Some(&group));
+    popover
+}
+
+fn add_ctx_action(
+    group: &gio::SimpleActionGroup,
+    name: &str,
+    action: ContextAction,
+    on_action: &Rc<dyn Fn(ContextAction)>,
+) {
+    let simple = gio::SimpleAction::new(name, None);
+    let on_action = Rc::clone(on_action);
+    simple.connect_activate(move |_, _| {
+        on_action(action);
+    });
+    group.add_action(&simple);
 }

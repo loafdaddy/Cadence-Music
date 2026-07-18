@@ -106,7 +106,7 @@ impl Default for AlbumsView {
 
 fn album_card(album: &Album, artist: &str, art: Option<&Path>) -> gtk::Box {
     let (frame, picture) = artwork_frame(COVER_SIZE, &["card", "cadence-artwork"]);
-    set_artwork_file(&picture, art);
+    set_artwork_file(&picture, art, COVER_SIZE);
 
     let title = gtk::Label::builder()
         .label(&album.name)

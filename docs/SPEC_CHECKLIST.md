@@ -1,87 +1,98 @@
-# Cadence — Specification Checklist (Milestone 3)
+# Cadence — Specification Checklist (Milestone 4)
 
-Compared against the original project brief and the current codebase after the UX redesign.
+Compared against the original project brief and the codebase after the Milestone 4 polish pass
+(`feature/milestone-4-player-polish`).
+
 Status: ✅ Complete · 🚧 Partial · ❌ Missing
 
 ## Design principle
 
 Library first. Player as a compact dock. Immersive listening is opt-in via Now Playing.
 
-## UX / shell (Milestone 3 focus)
+## UX / shell
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Compact playback dock (~90–120px) | ✅ | Fixed `Picture` natural-size blow-up (`can_shrink`) |
-| Title / artist / album / favourite in dock | ✅ | |
+| Compact playback dock (~90–120px) | ✅ | Fixed height (96px). Artwork loads at display size; wrapper does not propagate `Picture` natural size. CSS `max-height` clamp. |
+| Title / artist / album / favourite in dock | ✅ | Labels ellipsize; layout stable across tracks |
 | Click artwork → Now Playing overlay | ✅ | Slide-up revealer |
-| Optional vinyl animation in Now Playing | 🚧 | Disc spin + tonearm cue; toggleable; refine later |
+| Optional vinyl animation in Now Playing | 🚧 | Disc spin + tonearm cue; toggleable; still coarse |
 | Library home full width | ✅ | Master column hidden when unused |
 | Continue / Recent albums / Recently added / stats | ✅ | |
 | Artist detail: artwork on album header only | ✅ | Tracks are title + duration |
-| Organise preview functional | ✅ | Was empty because disk `read_metadata` dropped all tracks; now DB-backed + auto-preview |
-| Library-wide Find Missing Metadata | 🚧 | Scans albums, rate-limited MB lookups, summary toast; artist photos not yet |
-| Artist portraits from lookup | ✅ | MB → Wikidata → Commons; initials fallback; schema v2 |
-| Global grouped search | 🚧 | Artists / Albums / Songs / Genres / Years / Folders; playlists later |
-| Lookup progress UI | ✅ | Banner phase + done/total during library fill |
-| Favourite toggle on song rows | ✅ | Toggle in lists + dock |
+| Organise preview / apply / undo | ✅ | DB-backed preview; undo via menu |
+| Library-wide Find Missing Metadata | 🚧 | Album-oriented pass with progress banner; not a full per-track fill |
+| Artist portraits from lookup | 🚧 | MB → Wikidata → Commons download + DB `image_path`; **UI does not show portraits or initials yet** |
+| Global grouped search | 🚧 | Artists / Albums / Songs / Genres / Years / Folders; playlists not included |
+| Lookup progress UI | ✅ | Banner / spinner phase + done/total |
+| Favourite toggle on song rows + dock | ✅ | |
+| Context menus (queue / playlist / delete) | ✅ | Native `PopoverMenu` + `gio::Menu` (Milestone 4) |
 
 ## Core philosophy & stack
 
-| Item | Status |
-|------|--------|
-| GTK4 + libadwaita + Rust | ✅ |
-| Flatpak-first | 🚧 |
-| Offline-first | ✅ |
-| 100k library performance | 🚧 |
+| Item | Status | Notes |
+|------|--------|-------|
+| GTK4 + libadwaita + Rust | ✅ | |
+| Flatpak-first | 🚧 | Manifest + finish-args present; local `cargo run` still primary for day-to-day |
+| Offline-first | ✅ | Network only for optional lookup |
+| 100k library performance | 🚧 | Songs paginated; lists are not virtualized |
 
 ## Library / organisation / metadata
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Folder scan + watch | ✅ | |
-| Tag read (lofty) | ✅ | Unknown Artist only when tags truly missing |
-| Organise preview + apply + undo | ✅ | Multi-root path selection by longest folder prefix |
-| Single-track metadata edit | ✅ | |
+| Folder scan + watch | ✅ | Debounced `notify` watcher; watches new folders on add |
+| Tag read (lofty) | ✅ | |
+| Organise preview + apply + undo | ✅ | |
+| Single-track metadata edit | ✅ | Menu → Edit Metadata (current track) |
 | Batch metadata edit UI | ❌ | |
-| MusicBrainz / CAA | 🚧 | Per-track + limited library pass |
+| MusicBrainz / CAA | 🚧 | Per-track helper + limited library pass; rate-limited |
 
 ## Browsing / playback / playlists
 
-| Item | Status |
-|------|--------|
-| Artists / Albums / Songs master-detail | ✅ / 🚧 |
-| Genres / Years / Folders views | ❌ |
-| Queue / shuffle / repeat | ✅ |
-| Gapless / ReplayGain / crossfade | ❌ |
-| Manual playlists | ✅ |
-| Smart playlists / M3U | ❌ |
-| Mini player window | ❌ |
+| Item | Status | Notes |
+|------|--------|-------|
+| Artists master-detail | ✅ | List + album sections / singles |
+| Albums browser | 🚧 | Cover grid → song list (no dedicated album page) |
+| Songs browser | ✅ | Sort + load-more pagination |
+| Genres / Years / Folders views | ❌ | Appear in search only; no sidebar destinations |
+| Queue / shuffle / repeat | ✅ | Off / All / One |
+| Gapless / ReplayGain / crossfade | ❌ | Preferences copy acknowledges later |
+| Manual playlists | 🚧 | Create, add-from-context, play work; **no delete/rename UI** (service APIs exist) |
+| Smart playlists / M3U | ❌ | |
+| Mini player window | ❌ | |
 
 ## Linux integration
 
-| Item | Status |
-|------|--------|
-| MPRIS basics | 🚧 |
-| Notifications / DnD / open folder | ❌ |
-| Flatpak portals | 🚧 |
+| Item | Status | Notes |
+|------|--------|-------|
+| MPRIS basics | 🚧 | Play / pause / next / previous + metadata; `can_seek` advertised but **seek not wired**; no Raise |
+| Notifications | ❌ | Portal talked in Flatpak; unused |
+| Open folder / DnD | ❌ | |
+| Flatpak portals | 🚧 | FileChooser used via `gtk::FileDialog`; Documents / Notification / OpenURI declared only |
 
-## Previously “implemented but broken”
+## Previously broken (and current status)
 
-| Feature | Root cause | Fix |
-|---------|------------|-----|
-| Giant player | `gtk::Picture` `can_shrink(false)` expanded to image natural size | Compact dock + shrink + CSS max size |
-| Library left void | Master pane + separator always in layout | Hide master pane/sep except Artists |
-| Organise empty preview | `read_metadata().ok()?` dropped every track | Build plan from DB metadata; auto-preview on open |
-| Lookup felt dead | No progress; required open list | Toasts + library-wide pass from home |
+| Feature | Root cause | Status |
+|---------|------------|--------|
+| Giant player / growing dock | `gtk::Picture` preferred size = full image; `size_request` is a minimum only | **Re-fixed in M4** — scaled textures + non-propagating clip + dock `max-height` |
+| Context menu item border | Custom `gtk::Button`s inside `Popover` fought Adwaita | **Fixed in M4** — `PopoverMenu` |
+| Library left void | Master pane always in layout | Fixed (M3) |
+| Organise empty preview | Disk `read_metadata` dropped tracks | Fixed (M3) |
+| Lookup felt dead | No progress UI | Fixed (M3) |
 
-## Recommended next (before more features)
+## Audit notes (Milestone 4)
 
-1. Artist photo download + cache (keep initials fallback)
-2. Progress UI for long metadata/organise jobs (`adw::Banner` or dialog)
-3. Favourite toggle on song rows (dock toggle exists)
-4. Genres browse + search groups
-5. Gapless playback or remove from README claims
-6. Polish vinyl (shared-element / proper tonearm drawing)
+Verified by reading wiring in `window.rs`, UI modules, playback, MPRIS, core library worker, and Flatpak manifest — not by assuming a control implies a finished feature.
+
+### Over-claimed before this pass
+- Artist portraits marked ✅ while the app crate never reads `image_path`.
+- Dock marked fully fixed while high-res covers could still grow the bar.
+- README listed capabilities (e.g. MPRIS, Flatpak) without noting partial depth.
+
+### Unused / incomplete service surface
+- `delete_playlist`, `rescan_path`, `lookup_and_fill` (direct) exist on `LibraryService` but lack full UI paths.
+- Preferences Playback page is a placeholder (colour scheme row non-interactive).
 
 ## Do not add yet
 

@@ -7,7 +7,9 @@ use adw::prelude::*;
 use cadence_core::models::{Album, Artist, Track, TrackDisplay};
 
 use super::library_home::ContextHandler;
-use super::{artwork_frame, attach_context_menu, format_duration_ms, set_artwork_file, ContextAction};
+use super::{
+    artwork_frame, attach_context_menu, format_duration_ms, set_artwork_file, ContextAction,
+};
 
 pub struct ArtistDetail {
     pub widget: gtk::ScrolledWindow,
@@ -198,7 +200,7 @@ fn album_section(
     section.add_css_class("cadence-album-card");
 
     let (art_frame, art) = artwork_frame(96, &["card", "cadence-artwork"]);
-    set_artwork_file(&art, album.artwork_path.as_deref());
+    set_artwork_file(&art, album.artwork_path.as_deref(), 96);
 
     let title = gtk::Label::builder()
         .label(&album.name)

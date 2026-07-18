@@ -2,6 +2,7 @@
 
 .cadence-player {
   min-height: 96px;
+  max-height: 96px;
   background-color: alpha(@window_bg_color, 0.94);
   border-top: 1px solid alpha(@borders, 0.55);
 }
@@ -13,11 +14,21 @@
 .cadence-dock-art-btn {
   padding: 0;
   min-width: 72px;
+  max-width: 72px;
   min-height: 72px;
+  max-height: 72px;
 }
 
 .cadence-artwork {
   border-radius: 8px;
+}
+
+.cadence-art-square {
+  border-radius: 8px;
+  border: none;
+  box-shadow: none;
+  background: none;
+  padding: 0;
 }
 
 .cadence-play {
@@ -73,10 +84,6 @@
   background-color: @window_bg_color;
 }
 
-.cadence-art-square {
-  border-radius: 8px;
-}
-
 .cadence-vinyl-disc {
   border-radius: 999px;
   background: radial-gradient(
@@ -109,15 +116,6 @@
 
 .cadence-tonearm {
   opacity: 0.92;
-}
-
-.cadence-context-menu {
-  padding: 6px;
-  min-width: 200px;
-}
-
-.cadence-context-item {
-  padding: 8px 12px;
 }
 
 @keyframes cadence-spin {
