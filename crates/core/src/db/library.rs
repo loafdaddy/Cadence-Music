@@ -474,7 +474,12 @@ impl Database {
         Ok(rows.filter_map(std::result::Result::ok).collect())
     }
 
-    /// Tracks for an artist that are not attached to any album (singles / loose files).
+    /// Tracks credited to an artist that are not already listed under that
+    /// artist's own albums.
+    ///
+    /// Includes true singles (`album_id IS NULL`) and tracks whose album is
+    /// owned by a different album artist (common for collaboration tags like
+    /// `"A/B"` when the release belongs to `"A"`).
     pub fn singles_by_artist_display(&self, artist: ArtistId) -> Result<Vec<TrackDisplay>> {
         let sql = format!(
             "SELECT {TRACK_COLUMNS}, \
@@ -483,7 +488,13 @@ impl Database {
              LEFT JOIN artists ar ON ar.id = t.artist_id \
              LEFT JOIN albums al ON al.id = t.album_id \
              WHERE (t.artist_id = ?1 OR t.album_artist_id = ?1) \
-               AND t.album_id IS NULL \
+               AND (
+                    t.album_id IS NULL
+                    OR NOT EXISTS (
+                        SELECT 1 FROM albums own
+                        WHERE own.id = t.album_id AND own.album_artist_id = ?1
+                    )
+               ) \
              ORDER BY t.title COLLATE NOCASE"
         );
         let mut stmt = self.conn.prepare(&sql)?;
@@ -1009,5 +1020,62 @@ mod tests {
         let lists = db.playlists().unwrap();
         assert_eq!(lists.len(), 1);
         assert_eq!(lists[0].track_ids, vec![id]);
+    }
+
+    #[test]
+    fn collab_artist_sees_tracks_on_primary_album_artist_release() {
+        let db = Database::open_in_memory().unwrap();
+        // Tagged artist is a collab string; album artist owns the release.
+        let mut collab = meta(
+            "Rein Me In",
+            "Sam Fender/Olivia Dean",
+            "People Watching",
+        );
+        collab.album_artist = Some("Sam Fender".to_owned());
+        db.upsert_track(&discovered("/m/collab.flac"), &collab)
+            .unwrap();
+
+        let artists = db.list_artists().unwrap();
+        let collab_artist = artists
+            .iter()
+            .find(|a| a.name == "Sam Fender/Olivia Dean")
+            .expect("collab artist row");
+        let primary = artists
+            .iter()
+            .find(|a| a.name == "Sam Fender")
+            .expect("primary album artist");
+
+        assert!(
+            db.albums_by_artist(collab_artist.id).unwrap().is_empty(),
+            "collab tag must not own the album"
+        );
+        let singles = db.singles_by_artist_display(collab_artist.id).unwrap();
+        assert_eq!(singles.len(), 1);
+        assert_eq!(singles[0].track.title, "Rein Me In");
+
+        // Primary artist still sees the album, not a duplicate single.
+        assert_eq!(db.albums_by_artist(primary.id).unwrap().len(), 1);
+        assert!(db.singles_by_artist_display(primary.id).unwrap().is_empty());
+    }
+
+    #[test]
+    fn true_singles_without_album_still_listed() {
+        let db = Database::open_in_memory().unwrap();
+        let mut loose = meta("Loose Track", "Solo Artist", "");
+        loose.album = None;
+        loose.album_artist = Some("Solo Artist".to_owned());
+        db.upsert_track(&discovered("/m/loose.flac"), &loose)
+            .unwrap();
+
+        let artist = db
+            .list_artists()
+            .unwrap()
+            .into_iter()
+            .find(|a| a.name == "Solo Artist")
+            .unwrap();
+        assert!(db.albums_by_artist(artist.id).unwrap().is_empty());
+        let singles = db.singles_by_artist_display(artist.id).unwrap();
+        assert_eq!(singles.len(), 1);
+        assert_eq!(singles[0].track.title, "Loose Track");
     }
 }

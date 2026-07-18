@@ -162,7 +162,10 @@ fn singles_section(
         .css_classes(["title-3"])
         .build();
     let sub = gtk::Label::builder()
-        .label(format!("{} tracks without an album", tracks.len()))
+        .label(format!(
+            "{} tracks not on this artist’s albums",
+            tracks.len()
+        ))
         .xalign(0.0)
         .css_classes(["dim-label", "caption"])
         .build();
