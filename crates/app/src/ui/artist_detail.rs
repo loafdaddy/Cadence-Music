@@ -202,8 +202,8 @@ fn album_section(
     let section = gtk::Box::new(gtk::Orientation::Vertical, 10);
     section.add_css_class("cadence-album-card");
 
-    let (art_frame, art) = artwork_frame(96, &["card", "cadence-artwork"]);
-    set_artwork_file(&art, album.artwork_path.as_deref(), 96);
+    let (art_frame, art) = artwork_frame(128, &["card", "cadence-artwork"]);
+    set_artwork_file(&art, album.artwork_path.as_deref(), 128);
 
     let title = gtk::Label::builder()
         .label(&album.name)

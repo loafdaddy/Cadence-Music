@@ -25,8 +25,8 @@ pub struct NowPlaying {
     pub vinyl_toggle: gtk::Switch,
     title: gtk::Label,
     subtitle: gtk::Label,
-    artwork: gtk::Picture,
-    disc: gtk::Fixed,
+    artwork: gtk::Image,
+    disc: gtk::Box,
     tonearm: gtk::DrawingArea,
     position_label: gtk::Label,
     duration_label: gtk::Label,
@@ -76,9 +76,11 @@ impl NowPlaying {
         let (art_frame, artwork) = artwork_frame(ART_SIZE, &["cadence-vinyl-label"]);
         art_frame.remove_css_class("cadence-art-square");
         art_frame.add_css_class("cadence-vinyl-art-wrap");
+        art_frame.set_halign(gtk::Align::Center);
+        art_frame.set_valign(gtk::Align::Center);
 
-        // Disc is a Fixed square: artwork margins/natural size cannot enlarge it.
-        let disc = gtk::Fixed::new();
+        // Disc is a fixed square; artwork is centered inside and cannot enlarge it.
+        let disc = gtk::Box::new(gtk::Orientation::Vertical, 0);
         disc.add_css_class("cadence-vinyl-disc");
         disc.set_halign(gtk::Align::Center);
         disc.set_valign(gtk::Align::Center);
@@ -86,8 +88,12 @@ impl NowPlaying {
         disc.set_hexpand(false);
         disc.set_vexpand(false);
         disc.set_overflow(gtk::Overflow::Hidden);
-        let inset = ((DISC_SIZE - ART_SIZE) / 2) as f64;
-        disc.put(&art_frame, inset, inset);
+        let art_pad = ((DISC_SIZE - ART_SIZE) / 2).max(0);
+        art_frame.set_margin_top(art_pad);
+        art_frame.set_margin_bottom(art_pad);
+        art_frame.set_margin_start(art_pad);
+        art_frame.set_margin_end(art_pad);
+        disc.append(&art_frame);
 
         let tonearm = gtk::DrawingArea::builder()
             .content_width(90)
@@ -102,7 +108,6 @@ impl NowPlaying {
             draw_tonearm(cr, w as f64, h as f64, false);
         });
 
-        // Stage is also Fixed so the tonearm overlay cannot inflate layout.
         let stage = gtk::Overlay::new();
         stage.set_halign(gtk::Align::Center);
         stage.set_hexpand(false);
@@ -248,6 +253,7 @@ impl NowPlaying {
                     gtk::TextDirection::None,
                     gtk::IconLookupFlags::empty(),
                 );
+                self.artwork.set_pixel_size(ART_SIZE);
                 self.artwork
                     .set_paintable(Some(&p.upcast::<gdk::Paintable>()));
             }

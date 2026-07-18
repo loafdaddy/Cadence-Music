@@ -11,10 +11,11 @@ use super::{artwork_frame, format_duration_ms, set_artwork_file};
 
 const ART_SIZE: i32 = 72;
 const DOCK_HEIGHT: i32 = 96;
+const SIDE_WIDTH: i32 = 280;
 
 /// Bottom playback dock (~100px). Click artwork to open Now Playing.
 pub struct PlayerBar {
-    pub widget: gtk::Box,
+    pub widget: gtk::CenterBox,
     pub play_button: gtk::Button,
     pub prev_button: gtk::Button,
     pub next_button: gtk::Button,
@@ -29,7 +30,7 @@ pub struct PlayerBar {
     pub subtitle: gtk::Label,
     pub position_label: gtk::Label,
     pub duration_label: gtk::Label,
-    pub artwork: gtk::Picture,
+    pub artwork: gtk::Image,
     seeking: Rc<Cell<bool>>,
     on_expand: Rc<RefCell<Option<Box<dyn Fn()>>>>,
 }
@@ -45,7 +46,6 @@ impl PlayerBar {
             .css_classes(["flat", "cadence-dock-art-btn"])
             .tooltip_text("Now Playing")
             .build();
-        // size_request is a minimum only — also clip so artwork never grows the dock.
         art_button.set_size_request(ART_SIZE, ART_SIZE);
         art_button.set_hexpand(false);
         art_button.set_vexpand(false);
@@ -84,7 +84,8 @@ impl PlayerBar {
 
         let left = gtk::Box::new(gtk::Orientation::Horizontal, 12);
         left.set_valign(gtk::Align::Center);
-        left.set_size_request(280, -1);
+        left.set_hexpand(true);
+        left.set_size_request(SIDE_WIDTH, -1);
         left.append(&art_button);
         left.append(&meta);
         left.append(&favorite_button);
@@ -135,15 +136,15 @@ impl PlayerBar {
 
         let seek_row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
         seek_row.set_hexpand(true);
+        seek_row.set_size_request(280, -1);
         seek_row.append(&position_label);
         seek_row.append(&seek);
         seek_row.append(&duration_label);
 
         let center = gtk::Box::new(gtk::Orientation::Vertical, 2);
-        center.set_hexpand(true);
+        center.set_halign(gtk::Align::Center);
         center.set_valign(gtk::Align::Center);
-        center.set_margin_start(8);
-        center.set_margin_end(8);
+        center.set_hexpand(true);
         center.append(&controls);
         center.append(&seek_row);
 
@@ -162,12 +163,14 @@ impl PlayerBar {
         let right = gtk::Box::new(gtk::Orientation::Horizontal, 6);
         right.set_valign(gtk::Align::Center);
         right.set_halign(gtk::Align::End);
-        right.set_size_request(160, -1);
+        right.set_hexpand(true);
+        right.set_size_request(SIDE_WIDTH, -1);
         right.append(&gtk::Image::from_icon_name("audio-volume-high-symbolic"));
         right.append(&volume);
         right.append(&queue_button);
 
-        let widget = gtk::Box::new(gtk::Orientation::Horizontal, 12);
+        // CenterBox keeps transport truly centered regardless of side content width.
+        let widget = gtk::CenterBox::new();
         widget.add_css_class("cadence-player");
         widget.set_margin_start(12);
         widget.set_margin_end(12);
@@ -176,12 +179,11 @@ impl PlayerBar {
         widget.set_hexpand(true);
         widget.set_vexpand(false);
         widget.set_valign(gtk::Align::End);
-        // Fixed dock height: request is a floor; overflow + CSS max-height clamp growth.
         widget.set_size_request(-1, DOCK_HEIGHT);
         widget.set_overflow(gtk::Overflow::Hidden);
-        widget.append(&left);
-        widget.append(&center);
-        widget.append(&right);
+        widget.set_start_widget(Some(&left));
+        widget.set_center_widget(Some(&center));
+        widget.set_end_widget(Some(&right));
 
         let seeking_press = Rc::clone(&seeking);
         seek.connect_change_value(move |_, _, _| {
@@ -282,12 +284,12 @@ impl PlayerBar {
         }
         self.position_label
             .set_label(&format_duration_ms(Some(position_ms)));
-        // Remaining time on the right feels more premium than total-only.
         let remaining = duration_ms.saturating_sub(position_ms);
         self.duration_label
             .set_label(&format!("-{}", format_duration_ms(Some(remaining))));
         if duration_ms > 0 {
-            self.seek.set_value(position_ms as f64 / duration_ms as f64);
+            self.seek
+                .set_value(position_ms as f64 / duration_ms as f64);
         }
     }
 }
@@ -306,7 +308,7 @@ fn icon_button(icon: &str, tooltip: &str) -> gtk::Button {
         .build()
 }
 
-fn set_fallback_art(artwork: &gtk::Picture) {
+fn set_fallback_art(artwork: &gtk::Image) {
     if let Some(display) = gdk::Display::default() {
         let paintable = gtk::IconTheme::for_display(&display).lookup_icon(
             "folder-music-symbolic",
@@ -316,6 +318,7 @@ fn set_fallback_art(artwork: &gtk::Picture) {
             gtk::TextDirection::None,
             gtk::IconLookupFlags::empty(),
         );
+        artwork.set_pixel_size(ART_SIZE);
         artwork.set_paintable(Some(&paintable.upcast::<gdk::Paintable>()));
     }
 }

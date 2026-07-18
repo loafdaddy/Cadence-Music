@@ -7,7 +7,8 @@ use cadence_core::models::{Album, AlbumId};
 
 use super::{artwork_frame, attach_context_menu, set_artwork_file, ContextAction};
 
-const COVER_SIZE: i32 = 160;
+const COVER_SIZE: i32 = 168;
+const CARD_WIDTH: i32 = 168;
 
 pub struct AlbumsView {
     pub widget: gtk::ScrolledWindow,
@@ -22,20 +23,22 @@ impl AlbumsView {
     pub fn new() -> Self {
         let flow = gtk::FlowBox::builder()
             .selection_mode(gtk::SelectionMode::Single)
-            .homogeneous(false)
+            .homogeneous(true)
             .max_children_per_line(8)
             .min_children_per_line(2)
-            .row_spacing(16)
-            .column_spacing(16)
-            .margin_start(20)
-            .margin_end(20)
+            .row_spacing(20)
+            .column_spacing(20)
+            .margin_start(24)
+            .margin_end(24)
             .margin_top(16)
-            .margin_bottom(20)
+            .margin_bottom(24)
+            .valign(gtk::Align::Start)
             .build();
 
         let widget = gtk::ScrolledWindow::builder()
             .vexpand(true)
             .hexpand(true)
+            .hscrollbar_policy(gtk::PolicyType::Never)
             .child(&flow)
             .build();
 
@@ -110,44 +113,34 @@ fn album_card(album: &Album, artist: &str, art: Option<&Path>) -> gtk::Box {
 
     let title = gtk::Label::builder()
         .label(&album.name)
+        .xalign(0.0)
         .wrap(false)
-        .justify(gtk::Justification::Center)
-        .width_chars(18)
+        .lines(1)
         .max_width_chars(18)
         .ellipsize(gtk::pango::EllipsizeMode::End)
         .css_classes(["heading"])
         .build();
-    let year = album.year.map(|y| format!("{y}")).unwrap_or_default();
-    let genre = album.genre.clone().unwrap_or_default();
     let subtitle = gtk::Label::builder()
-        .label(format!(
-            "{artist}\n{}{}{} tracks",
-            if year.is_empty() {
-                String::new()
-            } else {
-                format!("{year} · ")
-            },
-            if genre.is_empty() {
-                String::new()
-            } else {
-                format!("{genre} · ")
-            },
-            album.track_count
-        ))
-        .justify(gtk::Justification::Center)
-        .width_chars(18)
+        .label(format!("{artist}  ·  {} tracks", album.track_count))
+        .xalign(0.0)
+        .wrap(false)
+        .lines(1)
         .max_width_chars(18)
         .ellipsize(gtk::pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
         .build();
 
+    let text = gtk::Box::new(gtk::Orientation::Vertical, 2);
+    text.set_size_request(CARD_WIDTH, 44);
+    text.append(&title);
+    text.append(&subtitle);
+
     let box_ = gtk::Box::new(gtk::Orientation::Vertical, 8);
     box_.add_css_class("cadence-album-card");
     box_.set_halign(gtk::Align::Center);
     box_.set_valign(gtk::Align::Start);
-    box_.set_size_request(COVER_SIZE, -1);
+    box_.set_size_request(CARD_WIDTH, COVER_SIZE + 56);
     box_.append(&frame);
-    box_.append(&title);
-    box_.append(&subtitle);
+    box_.append(&text);
     box_
 }

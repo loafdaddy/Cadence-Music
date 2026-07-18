@@ -313,8 +313,8 @@ fn simple_string_list(labels: &[String]) -> gtk::ListBox {
 }
 
 fn album_result_row(album: &Album, artist: &str) -> gtk::ListBoxRow {
-    let (art_frame, art) = super::artwork_frame(44, &["card"]);
-    super::set_artwork_file(&art, album.artwork_path.as_deref(), 44);
+    let (art_frame, art) = super::artwork_frame(48, &["card"]);
+    super::set_artwork_file(&art, album.artwork_path.as_deref(), 48);
     let title = gtk::Label::builder()
         .label(&album.name)
         .xalign(0.0)

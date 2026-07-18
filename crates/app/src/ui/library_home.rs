@@ -69,9 +69,9 @@ impl LibraryHome {
             .selection_mode(gtk::SelectionMode::None)
             .max_children_per_line(8)
             .min_children_per_line(2)
-            .row_spacing(12)
-            .column_spacing(12)
-            .homogeneous(false)
+            .row_spacing(16)
+            .column_spacing(16)
+            .homogeneous(true)
             .build();
         let recent_tracks_box = gtk::Box::new(gtk::Orientation::Vertical, 2);
 
@@ -234,30 +234,37 @@ fn pill_button(label: &str, icon: &str) -> gtk::Button {
 }
 
 fn home_album_card(album: &Album, artist: &str) -> gtk::Box {
-    let (frame, picture) = artwork_frame(140, &["card", "cadence-artwork"]);
-    set_artwork_file(&picture, album.artwork_path.as_deref(), 140);
+    let (frame, picture) = artwork_frame(148, &["card", "cadence-artwork"]);
+    set_artwork_file(&picture, album.artwork_path.as_deref(), 148);
     let title = gtk::Label::builder()
         .label(&album.name)
+        .xalign(0.0)
         .wrap(false)
-        .width_chars(16)
+        .lines(1)
         .max_width_chars(16)
         .ellipsize(gtk::pango::EllipsizeMode::End)
         .css_classes(["heading"])
         .build();
     let sub = gtk::Label::builder()
         .label(artist)
-        .width_chars(16)
+        .xalign(0.0)
+        .wrap(false)
+        .lines(1)
         .max_width_chars(16)
         .ellipsize(gtk::pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
         .build();
+    let text = gtk::Box::new(gtk::Orientation::Vertical, 2);
+    text.set_size_request(148, 40);
+    text.append(&title);
+    text.append(&sub);
     let box_ = gtk::Box::new(gtk::Orientation::Vertical, 6);
     box_.add_css_class("cadence-album-card");
-    box_.set_size_request(140, -1);
+    box_.set_size_request(148, 148 + 48);
     box_.set_halign(gtk::Align::Center);
+    box_.set_valign(gtk::Align::Start);
     box_.append(&frame);
-    box_.append(&title);
-    box_.append(&sub);
+    box_.append(&text);
     box_
 }
 
@@ -389,8 +396,8 @@ pub fn rich_song_row(
     row_box.set_margin_bottom(8);
     row_box.append(&num);
     if show_art {
-        let (art_frame, art) = artwork_frame(40, &["card"]);
-        set_artwork_file(&art, item.artwork_path.as_deref(), 40);
+        let (art_frame, art) = artwork_frame(48, &["card"]);
+        set_artwork_file(&art, item.artwork_path.as_deref(), 48);
         row_box.append(&art_frame);
     }
     row_box.append(&text);
