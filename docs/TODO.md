@@ -7,11 +7,15 @@ Check items off only when behaviour is verified in the running app, not when a s
 
 - [x] Playback dock fixed height (artwork must not grow the bar)
 - [x] Context menu native Adwaita styling
-- [x] Spec checklist matches implementation
-- [ ] Artist portraits / initials visible in Artists UI
-- [ ] MPRIS seek handler (or set `can_seek` false)
+- [x] Spec checklist matches implementation (post deep audit)
+- [ ] Wire artist portrait download into library fill + show portraits/initials in Artists UI
+- [ ] MPRIS: update status on pause/play; seek handler or clear `can_seek`; Raise or clear `can_raise`
 - [ ] Playlist delete / rename in UI
-- [ ] Preferences Playback page: remove or implement placeholder rows
+- [ ] Interactive queue (jump to track; remove)
+- [ ] Edit Metadata targets the intended track (context menu action)
+- [ ] Search → Folder opens a real browse/filter (not toast)
+- [ ] Recent albums ordered by real recency
+- [ ] Preferences: implement or remove placeholder Playback rows; allow removing folders
 
 ## Features (next milestones)
 
@@ -19,6 +23,7 @@ Check items off only when behaviour is verified in the running app, not when a s
 - [ ] Genres sidebar browser
 - [ ] Years / Folders sidebar browsers (optional after Genres)
 - [ ] Search: include playlists group
+- [ ] Per-track MusicBrainz lookup that writes tags
 - [ ] Batch metadata editor
 - [ ] Gapless playback
 - [ ] ReplayGain
