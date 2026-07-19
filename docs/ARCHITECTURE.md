@@ -34,17 +34,18 @@ ApplicationWindow
 - **Now Playing:** immersive overlay revealed from the dock artwork; not the default chrome.
 - **App menu:** Preferences, Scan Library, Organise Library, Edit / Lookup Metadata, Undo Organisation, About, Quit.
 - **Home actions:** Organise Files and Find Missing Metadata (Scan lives in the menu only).
+- **Lookup progress:** header spinner + tooltip (not the scan Banner).
 
 ## Library scan
 
 - Startup and menu **Scan Library** both call `LibraryService::scan_all`.
-- Each folder pass discovers files on disk, **removes** DB tracks whose files are gone, upserts new/changed files, then `prune_orphans` (empty albums + unreferenced artists).
+- Each folder pass discovers files on disk, removes DB tracks whose files are gone, upserts new/changed files, then `prune_orphans` (empty albums + unreferenced artists).
 - `LibraryEvent::ScanFinished` carries a `ScanSummary` (`added` / `removed` / `updated`); the UI toasts only when added or removed is non-zero.
 - Live folder watching still handles incremental upsert / remove while the app is open.
 
 ## Organisation
 
-- Single layout (`Preset::ArtistAlbum`): tracks with an album → `Artist/Album/…`; without → `Artist/Singles/…`.
+- Single layout (`Preset::ArtistAlbum`): tracks with an album go under `Artist/Album/…`; without go under `Artist/Singles/…`.
 - Preview builds an `OrganizationPlan` (no disk writes); Apply executes renames and returns an in-memory `UndoLog`.
 - After each move (and on undo), empty parent directories are removed so leftover Album/Singles folders do not accumulate.
 
@@ -53,14 +54,17 @@ ApplicationWindow
 - `Player` wraps GStreamer `playbin` (audio only; video sink discarded).
 - `Queue` holds ordered tracks plus shuffle / repeat mode.
 - Dock and Now Playing share the same player/queue; they are two views, not two engines.
+- MPRIS exposes play/pause/next/previous/stop; status updates on track start are incomplete for dock pause (see [TODO.md](TODO.md)).
 
 ## Artwork
 
 - Extracted embeds and downloaded covers live under the app cache (`cadence_core::paths`).
 - UI uses `artwork_frame` + `set_artwork_file(picture, path, size)` so textures are loaded at display size and natural size cannot blow out parents.
+- Artist portrait download helpers exist in core but are not wired into fill or the Artists UI yet.
 
 ## Flatpak
 
 - Manifest: `build-aux/org.cadence.Cadence.yml`
 - Runtime: GNOME 48; owns `org.mpris.MediaPlayer2.Cadence`
 - Default music access: `xdg-music:rw`; other locations rely on document portal grants when chosen via `FileDialog`
+- Finish-args also declare FileChooser, Documents, Notification, and OpenURI portals (Notification unused so far)

@@ -613,8 +613,9 @@ impl LibraryService {
         self.call(|reply| Command::LookupAndFill { track, reply }, cont);
     }
 
-    /// Queue a full-library metadata fill on a background thread (artwork, genres,
-    /// years, artist portraits). Progress arrives via [`LibraryEvent::LookupProgress`].
+    /// Library-wide pass for missing album artwork and related tags.
+    /// Progress arrives via [`LibraryEvent::LookupProgress`].
+    /// Artist portrait download is not part of this pass yet.
     pub fn fill_missing_metadata(
         &self,
         cont: impl FnOnce(Result<LookupSummary>) + 'static,

@@ -1,5 +1,7 @@
 # Cadence — Development Roadmap
 
+High-level history and direction. Day-to-day status lives in [TODO.md](TODO.md).
+
 ## Done
 
 ### Milestone 1–2 — Foundation
@@ -17,39 +19,24 @@
 ### Milestone 4 — Polish
 - Dock height locked; artwork cannot resize the shell
 - Native context menus (`PopoverMenu`)
-- Full audit vs brief; documentation brought in sync with reality
+- Documentation brought in sync with reality
 
-### Library scan & organisation (post–M4)
-- Scan Library moved to the app menu (removed from home)
-- Rescan reconciles disk ↔ DB: add new tracks, remove missing ones, toast added/removed
+### Library scan and organisation
+- Scan Library in the app menu (removed from home)
+- Rescan reconciles disk and DB: add, remove, toast delta; prune orphan artists/albums
 - Single organise layout: Artist/Album, or Artist/Singles when album is missing
-- Empty directories pruned on organise apply/undo; orphan artists/albums pruned on track removal and after scan
+- Empty directories pruned on organise apply/undo
 
-## Next — proposed Milestone 5 (finish dead wiring first)
+## Next
 
-Priority order for the next development branch:
+Proposed Milestone 5: finish dead wiring first (see [TODO.md](TODO.md) “Next”).
 
-1. **Artist portraits end-to-end** — call download from fill; show `image_path` + initials in Artists UI
-2. **MPRIS honesty** — mirror pause/play status; wire seek or stop advertising it; same for Raise
-3. **Playlist + queue UX** — delete/rename playlists; jump/remove in queue
-4. **Metadata targeting** — context-menu Edit; optional per-track lookup that writes tags
-5. **Search stubs** — Folder activation; playlist group; genre query that scales
-6. **Dedicated album page** — replace “grid → flat songs”
-7. **Genres browser** — first-class sidebar view
-8. **Home recency** — Recent albums by real chronology
-9. **Large-library lists** — virtualization before claiming 100k readiness
-10. **Vinyl polish** — only if it stays optional and restrained
+Then expand browsers (album page, Genres), search stubs, and large-library lists.
 
 ## Later
 
-- Gapless playback / ReplayGain / crossfade (or drop from marketing copy permanently)
-- Batch metadata editor
-- Smart playlists / M3U import-export
-- Mini player window
-- Desktop notifications on track change
-- “Open containing folder”
-- Stronger Flatpak portal coverage (sandbox music dirs beyond `xdg-music`)
-- Persist organise undo across sessions (today: in-memory last apply only)
+Gapless / ReplayGain / crossfade, batch metadata, smart playlists / M3U, mini player,
+notifications, open-folder, stronger Flatpak portals, persisted organise undo.
 
 ## Explicitly deferred
 
