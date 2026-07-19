@@ -23,19 +23,40 @@ This is an **early build** (**v0.1.0**). Features work, but expect rough edges. 
 
 > Windows Media Player (Windows 7 era) + GNOME HIG + modern design + native Linux performance.
 
-## AI disclaimer
+<p align="center">
+  <img src="docs/assets/screenshot-library.png" alt="Cadence library home with playback dock" width="900"/>
+</p>
 
-Parts of Cadence — including code, docs, branding, and packaging — have been written or edited with **AI assistance** (for example Cursor and similar tools). That is intentional for an early project moving quickly.
+## Releases (try it on your machine)
 
-**AI-assisted contributions are welcome.** Use Cursor, Copilot, ChatGPT, Claude, or any other assistant if it helps you. You remain responsible for what you submit: understand the change, keep pull requests focused, and verify what you can.
+Published builds and notes live on GitHub and in [docs/RELEASES.md](docs/RELEASES.md).
 
-Full expectations: [CONTRIBUTING.md — AI-assisted contributions](CONTRIBUTING.md#ai-assisted-contributions).
+| Version | Date | Notes |
+|---------|------|-------|
+| **[0.1.0](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0)** | 2026-07-19 | First public beta |
 
-## Try it
+### Install the Flatpak bundle (personal use)
 
-### Flatpak (beta)
+1. Download `cadence-0.1.0.flatpak` from the [v0.1.0 release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0)
+2. Install (user install, no root required):
 
-Easiest way to install and try Cadence without touching your system Rust toolchain:
+```bash
+flatpak install --user ./cadence-0.1.0.flatpak
+flatpak run org.cadence.Cadence
+```
+
+You still need the GNOME 48 runtime once:
+
+```bash
+flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install --user -y org.gnome.Platform//48
+```
+
+Not on Flathub yet — GitHub release bundles and local builds only.
+
+## Try it (build yourself)
+
+### Flatpak from a clone
 
 ```bash
 # Once: install Flatpak builders (Fedora)
@@ -94,7 +115,7 @@ We want help. Good first steps:
 2. Open an issue for bugs or ideas, or pick an item from TODO
 3. Fork, branch from `main`, open a PR
 
-No contribution is too small — docs and Flatpak testing count. AI-assisted PRs are fine; see the [AI disclaimer](#ai-disclaimer) above.
+No contribution is too small — docs and Flatpak testing count. AI-assisted PRs are fine; see the [AI disclaimer](#ai-disclaimer) below.
 
 ## Architecture
 
@@ -104,6 +125,14 @@ No contribution is too small — docs and Flatpak testing count. AI-assisted PRs
 | `cadence` | GTK4 / libadwaita UI, GStreamer playback, MPRIS |
 
 The UI never blocks on disk I/O: a dedicated library worker owns the database.
+
+## AI disclaimer
+
+Parts of Cadence — including code, docs, branding, and packaging — have been written or edited with **AI assistance** (for example Cursor and similar tools). That is intentional for an early project moving quickly.
+
+**AI-assisted contributions are welcome.** Use Cursor, Copilot, ChatGPT, Claude, or any other assistant if it helps you. You remain responsible for what you submit: understand the change, keep pull requests focused, and verify what you can.
+
+Full expectations: [CONTRIBUTING.md — AI-assisted contributions](CONTRIBUTING.md#ai-assisted-contributions).
 
 ## License
 

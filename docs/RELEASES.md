@@ -41,8 +41,9 @@ Pre-1.0: expect breaking changes in minor releases. Mark development/beta builds
 - Cadence. wordmark and app icon; Flatpak beta via `./scripts/build-flatpak.sh`
 
 **Install**
+- Flatpak bundle (easiest for personal use): download `cadence-0.1.0.flatpak` from the [GitHub release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0), then `flatpak install --user ./cadence-0.1.0.flatpak`
 - From source: see [INSTALL.md](INSTALL.md)
-- Flatpak (local build): `./scripts/build-flatpak.sh` then `flatpak run org.cadence.Cadence`
+- Flatpak (build from clone): `./scripts/build-flatpak.sh` then `flatpak run org.cadence.Cadence`
 - GitHub: https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0
 
 **Known gaps:** see [TODO.md](TODO.md) (queue UI, playlist delete/rename, MPRIS pause status, portraits, etc.)
