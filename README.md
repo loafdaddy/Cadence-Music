@@ -52,7 +52,9 @@ flatpak install --user ./cadence-0.1.1.flatpak
 flatpak run org.cadence.Cadence
 ```
 
-Not on Flathub yet — GitHub release bundles and local builds only. Details: [docs/INSTALL.md](docs/INSTALL.md).
+If you open the `.flatpak` in **GNOME Software** and see two **Local file** options, choose the one tagged **USER**. The default (system-wide) often fails on a fresh machine; see [docs/INSTALL.md](docs/INSTALL.md).
+
+Not on Flathub yet — GitHub release bundles and local builds only.
 
 ## Try it (build yourself)
 

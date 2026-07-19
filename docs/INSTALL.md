@@ -26,6 +26,15 @@ flatpak run org.cadence.Cadence
 
 Release bundles are built with a Flathub `--runtime-repo` hint so Software / `flatpak install` can resolve the Platform when Flathub is configured. If install still complains about a missing runtime, run the Platform command in step 1.
 
+### GNOME Software (double-click the `.flatpak`)
+
+Prefer the terminal commands above when you can. If you open the file in **Software** and see two install targets under **Local file**:
+
+- Choose the option tagged **USER** (per-account install).
+- The default (no **USER** tag) is system-wide. It often hangs on **Preparing** or fails on a fresh machine unless Flathub and GNOME Platform are already set up **system-wide** (admin password required).
+
+Cadence cannot change Software’s default; that is a GNOME Software policy (`install-bundles-system-wide`). Until Cadence is on Flathub, **USER** or `flatpak install --user` is the reliable path.
+
 Not on Flathub yet — GitHub release bundles and local builds only.
 
 ### Uninstall
@@ -129,6 +138,7 @@ Data files (icons, desktop entry, metainfo) live under `data/`. When running fro
 | Symptom | What to try |
 |---------|-------------|
 | Bundle install fails: missing runtime | Add Flathub; `flatpak install --user -y org.gnome.Platform//49` |
+| Software hangs on Preparing / default Local file fails | Pick the **USER** target, or use `flatpak install --user` |
 | Bundle install fails on very old release | Use **0.1.1+** — 0.1.0 targeted EOL GNOME 48 |
 | No sound | Confirm GStreamer good/bad plugins are installed; check `GST_PLUGIN_PATH` |
 | Missing app icon when running from cargo | Ensure `data/icons/hicolor/scalable/apps/org.cadence.Cadence.svg` exists |

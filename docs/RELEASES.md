@@ -48,9 +48,11 @@ Pre-1.0: expect breaking changes in minor releases. Mark development/beta builds
 - Flatpak targets **GNOME Platform 49** (48 is end-of-life and no longer usable for clean Flathub installs)
 - `scripts/build-flatpak.sh` exports `cadence-0.1.1.flatpak` with a Flathub `--runtime-repo` hint
 - Docs clarify that the bundle is app-only and needs the Platform runtime once
+- GNOME Software: if two **Local file** targets appear, choose **USER** (system-wide default often hangs on fresh installs)
 
 **Install**
 - Flatpak bundle: download `cadence-0.1.1.flatpak` from the [GitHub release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1)
+- Prefer the terminal (`--user`). In Software, pick the **USER** target if offered.
 - One-time runtime (if needed):
 
 ```bash
