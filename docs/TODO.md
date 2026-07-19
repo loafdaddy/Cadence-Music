@@ -2,7 +2,7 @@
 
 Single living status list. Keep it honest: only check items when verified in the running app.
 
-Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md) · [INSTALL.md](INSTALL.md) · [CONTRIBUTING.md](../CONTRIBUTING.md)
+Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md) · [INSTALL.md](INSTALL.md) · [RELEASES.md](RELEASES.md) · [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ---
 

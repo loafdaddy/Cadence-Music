@@ -60,6 +60,7 @@ Typical change flow:
 | `scripts/` | Helper scripts (Flatpak build, debug run) |
 
 Status of features: [docs/TODO.md](docs/TODO.md). Do not claim something done unless it works in the running app.
+Releases: [docs/RELEASES.md](docs/RELEASES.md).
 
 ## What we need most right now
 

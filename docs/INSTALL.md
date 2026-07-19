@@ -113,3 +113,4 @@ Data files (icons, desktop entry, metainfo) live under `data/`. When running fro
 - [ARCHITECTURE.md](ARCHITECTURE.md) — crates and threading
 - [TODO.md](TODO.md) — status and priorities
 - [ROADMAP.md](ROADMAP.md) — milestones
+- [RELEASES.md](RELEASES.md) — version history and how to cut a release

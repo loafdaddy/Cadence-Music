@@ -2,6 +2,7 @@
 
 High-level history and direction. Day-to-day status: [TODO.md](TODO.md).
 Install / contribute: [INSTALL.md](INSTALL.md) · [CONTRIBUTING.md](../CONTRIBUTING.md).
+Version history: [RELEASES.md](RELEASES.md).
 
 ## Done
 
@@ -25,6 +26,7 @@ Install / contribute: [INSTALL.md](INSTALL.md) · [CONTRIBUTING.md](../CONTRIBUT
 - Cadence. wordmark + app icon (dark / purple accent)
 - Contributor docs; INSTALL from Flatpak and from source
 - `scripts/build-flatpak.sh` for local beta installs
+- **v0.1.0** first public beta — see [RELEASES.md](RELEASES.md)
 
 ## Next
 

@@ -9,11 +9,27 @@
   GTK4 · libadwaita · offline-first · early public beta
 </p>
 
+<p align="center">
+  <a href="https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0">v0.1.0</a>
+  ·
+  <a href="docs/RELEASES.md">Release history</a>
+  ·
+  <a href="CONTRIBUTING.md">Contributing</a>
+</p>
+
 Cadence aims to feel like it ships with Fedora Workstation: Wayland-first, Flatpak-friendly, no Electron.
 
-This is an **early build**. Features work, but expect rough edges. **Contributors are very welcome** — design, Rust, packaging, docs, and bug reports all help.
+This is an **early build** (**v0.1.0**). Features work, but expect rough edges. **Contributors are very welcome** — design, Rust, packaging, docs, and bug reports all help.
 
 > Windows Media Player (Windows 7 era) + GNOME HIG + modern design + native Linux performance.
+
+## AI disclaimer
+
+Parts of Cadence — including code, docs, branding, and packaging — have been written or edited with **AI assistance** (for example Cursor and similar tools). That is intentional for an early project moving quickly.
+
+**AI-assisted contributions are welcome.** Use Cursor, Copilot, ChatGPT, Claude, or any other assistant if it helps you. You remain responsible for what you submit: understand the change, keep pull requests focused, and verify what you can.
+
+Full expectations: [CONTRIBUTING.md — AI-assisted contributions](CONTRIBUTING.md#ai-assisted-contributions).
 
 ## Try it
 
@@ -68,7 +84,7 @@ Full contributor workflow: [CONTRIBUTING.md](CONTRIBUTING.md) · [docs/INSTALL.m
 
 Queue UI is display-only; playlists lack delete/rename; metadata edit targeting is weak; no Genres sidebar, batch editor, gapless/ReplayGain, or notifications yet.
 
-Living status list: [docs/TODO.md](docs/TODO.md). Direction: [docs/ROADMAP.md](docs/ROADMAP.md). Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Living status list: [docs/TODO.md](docs/TODO.md). Direction: [docs/ROADMAP.md](docs/ROADMAP.md). Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Releases: [docs/RELEASES.md](docs/RELEASES.md).
 
 ## Contributing
 
@@ -78,9 +94,7 @@ We want help. Good first steps:
 2. Open an issue for bugs or ideas, or pick an item from TODO
 3. Fork, branch from `main`, open a PR
 
-No contribution is too small — docs and Flatpak testing count.
-
-**AI-assisted work is welcome** (Cursor, Copilot, chat models, etc.). You remain responsible for the change: understand it, keep PRs focused, and verify what you can. See the [AI section in CONTRIBUTING.md](CONTRIBUTING.md#ai-assisted-contributions). Parts of this repo may already include AI-assisted edits.
+No contribution is too small — docs and Flatpak testing count. AI-assisted PRs are fine; see the [AI disclaimer](#ai-disclaimer) above.
 
 ## Architecture
 
