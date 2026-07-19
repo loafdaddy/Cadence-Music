@@ -27,11 +27,12 @@ Version history: [RELEASES.md](RELEASES.md).
 - Contributor docs; INSTALL from Flatpak and from source
 - `scripts/build-flatpak.sh` for local beta installs
 - **v0.1.0** first public beta — see [RELEASES.md](RELEASES.md)
+- **v0.1.1** Flatpak clean-install fix (GNOME 49 + runtime-repo bundle) — see [RELEASES.md](RELEASES.md)
 
 ## Next
 
 Finish dead wiring (see TODO “Next”), then browsers and large-library work.
-Get Flatpak verified on clean installs; Flathub later if the beta holds up.
+Verify Flatpak on a clean user install with the 0.1.1 bundle; Flathub later if the beta holds up.
 
 ## Later
 

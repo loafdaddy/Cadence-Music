@@ -54,7 +54,7 @@ These work enough to ship, but behaviour is incomplete or imprecise.
 - [ ] Playlists: no delete or rename UI; opened playlist rows omit artist/album labels
 - [ ] MPRIS: dock pause does not update playback status; `can_seek` / `can_raise` advertised but unwired
 - [ ] Preferences: colour-scheme row inert; folders are add-only (no remove)
-- [ ] Flatpak: manifest exists; day-to-day is still `cargo run`; portals beyond `xdg-music` incomplete
+- [ ] Flatpak: day-to-day is still often `cargo run`; portals beyond `xdg-music` incomplete (0.1.1 fixes clean-machine Platform/runtime-repo)
 - [ ] Large libraries: songs paginated; search / organise / genre paths can still load large sets
 - [ ] Organise undo is in-memory last-apply only (lost on quit)
 
@@ -86,7 +86,7 @@ Finish dead wiring before new surfaces:
 - [ ] Track-change notifications
 - [ ] Open containing folder / drag-and-drop
 - [ ] Persist organise undo across sessions
-- [ ] Flatpak verified end-to-end on a clean user install; portals beyond `xdg-music`
+- [ ] Flatpak verified end-to-end on a second clean Fedora user install (0.1.1 bundle); portals beyond `xdg-music`
 - [ ] MPRIS Raise / desktop entry activation
 - [ ] Publish to Flathub (after beta stabilises)
 

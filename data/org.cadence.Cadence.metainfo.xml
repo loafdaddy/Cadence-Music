@@ -38,6 +38,15 @@
   </recommends>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="0.1.1" date="2026-07-19" type="development">
+      <description>
+        <p>Flatpak install fix for clean machines.</p>
+        <ul>
+          <li>Move to supported GNOME Platform 49 (48 is end-of-life on Flathub)</li>
+          <li>Release bundles embed a Flathub runtime-repo hint</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-07-19" type="development">
       <description>
         <p>First public beta Flatpak.</p>

@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0">v0.1.0</a>
+  <a href="https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1">v0.1.1</a>
   ·
   <a href="docs/RELEASES.md">Release history</a>
   ·
@@ -19,7 +19,7 @@
 
 Cadence aims to feel like it ships with Fedora Workstation: Wayland-first, Flatpak-friendly, no Electron.
 
-This is an **early build** (**v0.1.0**). Features work, but expect rough edges. **Contributors are very welcome** — design, Rust, packaging, docs, and bug reports all help.
+This is an **early build** (**v0.1.1**). Features work, but expect rough edges. **Contributors are very welcome** — design, Rust, packaging, docs, and bug reports all help.
 
 > Windows Media Player (Windows 7 era) + GNOME HIG + modern design + native Linux performance.
 
@@ -33,26 +33,26 @@ Published builds and notes live on GitHub and in [docs/RELEASES.md](docs/RELEASE
 
 | Version | Date | Notes |
 |---------|------|-------|
-| **[0.1.0](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0)** | 2026-07-19 | First public beta |
+| **[0.1.1](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1)** | 2026-07-19 | Flatpak clean-install fix (GNOME 49) |
+| [0.1.0](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0) | 2026-07-19 | First public beta (Flatpak superseded) |
 
 ### Install the Flatpak bundle (personal use)
 
-1. Download `cadence-0.1.0.flatpak` from the [v0.1.0 release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0)
-2. Install (user install, no root required):
+The release `.flatpak` is **app-only** (a few MB). You need the GNOME Platform runtime from Flathub once (~1 GB).
 
 ```bash
-flatpak install --user ./cadence-0.1.0.flatpak
+# Once: Flathub + Platform
+flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install --user -y org.gnome.Platform//49
+
+# Then the release bundle
+# Download cadence-0.1.1.flatpak from:
+# https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1
+flatpak install --user ./cadence-0.1.1.flatpak
 flatpak run org.cadence.Cadence
 ```
 
-You still need the GNOME 48 runtime once:
-
-```bash
-flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install --user -y org.gnome.Platform//48
-```
-
-Not on Flathub yet — GitHub release bundles and local builds only.
+Not on Flathub yet — GitHub release bundles and local builds only. Details: [docs/INSTALL.md](docs/INSTALL.md).
 
 ## Try it (build yourself)
 
@@ -62,7 +62,7 @@ Not on Flathub yet — GitHub release bundles and local builds only.
 # Once: install Flatpak builders (Fedora)
 sudo dnf install flatpak-builder flatpak
 flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install --user -y org.gnome.Platform//48 org.gnome.Sdk//48 \
+flatpak install --user -y org.gnome.Platform//49 org.gnome.Sdk//49 \
   org.freedesktop.Sdk.Extension.rust-stable//24.08
 
 # From a clone of this repo

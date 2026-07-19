@@ -1,4 +1,4 @@
-# Flatpak manifest for Cadence (first public beta).
+# Flatpak manifest for Cadence (public beta).
 #
 # Quick path (from repo root):
 #   ./scripts/build-flatpak.sh
@@ -6,10 +6,14 @@
 #
 # Manual:
 #   flatpak-builder --user --install --force-clean build-dir build-aux/org.cadence.Cadence.yml
+#
+# Runtime note: the .flatpak release bundle is app-only (~few MB). It depends on
+# org.gnome.Platform from Flathub. Export with --runtime-repo so clean installs
+# can pull the runtime automatically (see scripts/build-flatpak.sh).
 
 app-id: org.cadence.Cadence
 runtime: org.gnome.Platform
-runtime-version: '48'
+runtime-version: '49'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable

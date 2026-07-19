@@ -1,8 +1,40 @@
 # Installing and running Cadence
 
-Cadence is an **early public beta**. Prefer Flatpak to try it; use a source checkout when you want to change code.
+Cadence is an **early public beta**. Prefer the release Flatpak bundle to try it; use a source checkout when you want to change code.
 
-## Flatpak (try the beta)
+## Flatpak bundle (personal use)
+
+The GitHub `.flatpak` is an **app-only** bundle (a few MB). It needs the shared **GNOME Platform** runtime from Flathub once (~1 GB). That is normal for Flatpak; the runtime is not packed into the release file.
+
+### 1. Flathub + Platform (once)
+
+```bash
+sudo dnf install flatpak
+flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install --user -y org.gnome.Platform//49
+```
+
+### 2. Install the release bundle
+
+1. Download `cadence-0.1.1.flatpak` from the [v0.1.1 release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1)
+2. Install and run:
+
+```bash
+flatpak install --user ./cadence-0.1.1.flatpak
+flatpak run org.cadence.Cadence
+```
+
+Release bundles are built with a Flathub `--runtime-repo` hint so Software / `flatpak install` can resolve the Platform when Flathub is configured. If install still complains about a missing runtime, run the Platform command in step 1.
+
+Not on Flathub yet — GitHub release bundles and local builds only.
+
+### Uninstall
+
+```bash
+flatpak uninstall --user org.cadence.Cadence
+```
+
+## Flatpak from a git clone (developers / packaging)
 
 ### Prerequisites (Fedora)
 
@@ -10,14 +42,14 @@ Cadence is an **early public beta**. Prefer Flatpak to try it; use a source chec
 sudo dnf install flatpak flatpak-builder
 flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user -y \
-  org.gnome.Platform//48 \
-  org.gnome.Sdk//48 \
+  org.gnome.Platform//49 \
+  org.gnome.Sdk//49 \
   org.freedesktop.Sdk.Extension.rust-stable//24.08
 ```
 
-The Rust SDK extension version must match what your Freedesktop SDK expects; if install fails, check `flatpak search rust-stable` and adjust the script/manifest accordingly.
+The Rust SDK extension branch must match the Freedesktop SDK under the GNOME runtime (GNOME 49 → `24.08`). If install fails, check `flatpak search rust-stable` and adjust.
 
-### Build and install (from a git clone)
+### Build and install
 
 ```bash
 git clone https://github.com/loafdaddy/Cadence-Music.git
@@ -26,19 +58,13 @@ cd Cadence-Music
 flatpak run org.cadence.Cadence
 ```
 
-The script runs `flatpak-builder` against `build-aux/org.cadence.Cadence.yml`, installs into your user Flatpak, and prints the run command.
-
-### Uninstall
-
-```bash
-flatpak uninstall --user org.cadence.Cadence
-```
+The script runs `flatpak-builder` against `build-aux/org.cadence.Cadence.yml`, installs into your user Flatpak, and writes `cadence-<version>.flatpak` with a Flathub runtime-repo hint for release uploads.
 
 ### Notes
 
 - Default music access is `xdg-music` (read/write). Folders outside that path need portal grants when you pick them in the app.
 - First Flatpak build downloads dependencies and can take a while.
-- This is not on Flathub yet — local install only for the first beta.
+- Keep the manifest on a supported (non-EOL) GNOME Platform — EOL runtimes drop off Flathub and break clean installs.
 
 ## From source (development)
 
@@ -102,6 +128,8 @@ Data files (icons, desktop entry, metainfo) live under `data/`. When running fro
 
 | Symptom | What to try |
 |---------|-------------|
+| Bundle install fails: missing runtime | Add Flathub; `flatpak install --user -y org.gnome.Platform//49` |
+| Bundle install fails on very old release | Use **0.1.1+** — 0.1.0 targeted EOL GNOME 48 |
 | No sound | Confirm GStreamer good/bad plugins are installed; check `GST_PLUGIN_PATH` |
 | Missing app icon when running from cargo | Ensure `data/icons/hicolor/scalable/apps/org.cadence.Cadence.svg` exists |
 | Flatpak build fails on Rust extension | Align `sdk-extensions` / install version with your Freedesktop runtime |

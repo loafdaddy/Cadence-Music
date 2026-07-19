@@ -67,7 +67,8 @@ ApplicationWindow
 
 - Manifest: `build-aux/org.cadence.Cadence.yml`
 - Local beta install: `./scripts/build-flatpak.sh` then `flatpak run org.cadence.Cadence`
-- Runtime: GNOME 48; owns `org.mpris.MediaPlayer2.Cadence`
+- Runtime: GNOME 49; owns `org.mpris.MediaPlayer2.Cadence`
+- Release `.flatpak` is app-only; export with Flathub `--runtime-repo` via `scripts/build-flatpak.sh`
 - Default music access: `xdg-music:rw`; other locations rely on document portal grants when chosen via `FileDialog`
 - Finish-args also declare FileChooser, Documents, Notification, and OpenURI portals (Notification unused so far)
 - Not on Flathub yet — see [INSTALL.md](INSTALL.md)
