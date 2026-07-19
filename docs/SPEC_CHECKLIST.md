@@ -1,7 +1,7 @@
-# Cadence — Specification Checklist (Milestone 4)
+# Cadence — Specification Checklist
 
-Compared against the original project brief and the codebase after the Milestone 4 polish pass
-(`feature/milestone-4-player-polish`). Deep audit of wiring (not button presence) informed these statuses.
+Compared against the original project brief and the codebase on `master`
+(post Milestone 4 polish, plus library scan / organisation updates).
 
 Status: ✅ Complete · 🚧 Partial · ❌ Missing
 
@@ -20,11 +20,12 @@ Library first. Player as a compact dock. Immersive listening is opt-in via Now P
 | Library home full width | ✅ | Master column hidden when unused |
 | Continue / Recent albums / Recently added / stats | 🚧 | Continue + recently added OK; “Recent albums” is highest album IDs, not listen/add chronology |
 | Artist detail: artwork on album header only | ✅ | Tracks are title + duration; fav icon on those rows is display-only |
-| Organise preview / apply / undo | ✅ | DB-backed; undo is last-apply in memory (lost on quit) |
+| Scan Library (menu) | ✅ | App menu action; reconciles disk ↔ DB (add new, remove missing); toast shows added/removed counts; Banner for progress |
+| Organise preview / apply / undo | ✅ | Single layout: Artist/Album or Artist/Singles; empty dirs pruned on apply/undo; undo is last-apply in memory (lost on quit) |
 | Library-wide Find Missing Metadata | 🚧 | Album pass + spinner/toast; MB genre field always unset; portraits never downloaded in this pass |
 | Artist portraits from lookup | 🚧 | Schema + download helpers exist; **fill never calls download**; UI never shows `image_path` or initials |
 | Global grouped search | 🚧 | Artists / Albums / Songs / Genres / Years / Folders; no playlists; folder click is toast-only; genre drill-down is client-side ≤500 songs |
-| Lookup progress UI | 🚧 | Header spinner + tooltip (not Banner); scan still uses Banner |
+| Lookup progress UI | 🚧 | Header spinner + tooltip (not Banner); scan uses Banner |
 | Favourite toggle on song rows + dock | ✅ | Home / Songs / Search / dock; not on artist-detail track rows |
 | Context menus (queue / playlist / delete) | ✅ | Native `PopoverMenu` + `gio::Menu` (Milestone 4) |
 
@@ -41,9 +42,9 @@ Library first. Player as a compact dock. Immersive listening is opt-in via Now P
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Folder scan + watch | ✅ | Debounced `notify` watcher; watches new folders on add |
+| Folder scan + watch | ✅ | Debounced `notify` watcher; watches new folders on add; full rescan also prunes deleted files and orphan artists/albums |
 | Tag read (lofty) | ✅ | |
-| Organise preview + apply + undo | ✅ | Multi-root via longest folder prefix in worker |
+| Organise preview + apply + undo | ✅ | One scheme only — album tracks → `Artist/Album/…`, no-album → `Artist/Singles/…`; multi-root via longest folder prefix |
 | Single-track metadata edit | 🚧 | Dialog works; menu targets queue current / `context_tracks.first()`, not a right-clicked row; no context “Edit” |
 | Batch metadata edit UI | ❌ | |
 | MusicBrainz / CAA | 🚧 | Library-wide album pass + CAA art; per-track `lookup_and_fill` unwired and does not write tags |
@@ -52,7 +53,7 @@ Library first. Player as a compact dock. Immersive listening is opt-in via Now P
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Artists master-detail | ✅ | List + album sections / singles |
+| Artists master-detail | ✅ | List + album sections / singles; empty artists pruned when their last track is removed |
 | Albums browser | 🚧 | Cover grid → song list (no dedicated album page) |
 | Songs browser | ✅ | Sort + load-more pagination |
 | Genres / Years / Folders views | ❌ | Appear in search only; no sidebar destinations |
@@ -80,6 +81,9 @@ Library first. Player as a compact dock. Immersive listening is opt-in via Now P
 | Library left void | Master pane always in layout | Fixed (M3) |
 | Organise empty preview | Disk `read_metadata` dropped tracks | Fixed (M3) |
 | Lookup felt dead | No progress UI | Fixed (M3) — spinner path; still not Banner |
+| Ghost artists after wipe/rescan | Track removal pruned albums only, not artists | **Fixed** — `prune_orphans` on remove and after scan |
+| Organise left empty Album/Singles dirs | Execute/undo did not walk empty parents | **Fixed** — prune empty ancestors on apply and undo |
+| Rescan left deleted files in DB | `scan_folder` only upserted | **Fixed** — reconcile disk ↔ DB; toast added/removed |
 
 ## Audit notes (Milestone 4)
 

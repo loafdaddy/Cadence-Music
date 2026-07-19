@@ -23,7 +23,7 @@ ApplicationWindow
       ├─ ToolbarView
       │  ├─ HeaderBar (search, add folder, menu)
       │  └─ Library shell
-      │     ├─ Banner (scan / lookup)
+      │     ├─ Banner (scan progress)
       │     ├─ Nav | [Master] | Detail stack
       │     └─ Playback dock (fixed height)
       └─ Now Playing revealer (overlay, opt-in)
@@ -32,6 +32,21 @@ ApplicationWindow
 - **Library first:** the detail stack is the primary surface.
 - **Dock:** permanent compact player (~96px). Artwork is clipped and scaled; it must never change dock height.
 - **Now Playing:** immersive overlay revealed from the dock artwork; not the default chrome.
+- **App menu:** Preferences, Scan Library, Organise Library, Edit / Lookup Metadata, Undo Organisation, About, Quit.
+- **Home actions:** Organise Files and Find Missing Metadata (Scan lives in the menu only).
+
+## Library scan
+
+- Startup and menu **Scan Library** both call `LibraryService::scan_all`.
+- Each folder pass discovers files on disk, **removes** DB tracks whose files are gone, upserts new/changed files, then `prune_orphans` (empty albums + unreferenced artists).
+- `LibraryEvent::ScanFinished` carries a `ScanSummary` (`added` / `removed` / `updated`); the UI toasts only when added or removed is non-zero.
+- Live folder watching still handles incremental upsert / remove while the app is open.
+
+## Organisation
+
+- Single layout (`Preset::ArtistAlbum`): tracks with an album → `Artist/Album/…`; without → `Artist/Singles/…`.
+- Preview builds an `OrganizationPlan` (no disk writes); Apply executes renames and returns an in-memory `UndoLog`.
+- After each move (and on undo), empty parent directories are removed so leftover Album/Singles folders do not accumulate.
 
 ## Playback
 

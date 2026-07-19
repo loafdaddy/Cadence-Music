@@ -8,6 +8,9 @@ Check items off only when behaviour is verified in the running app, not when a s
 - [x] Playback dock fixed height (artwork must not grow the bar)
 - [x] Context menu native Adwaita styling
 - [x] Spec checklist matches implementation (post deep audit)
+- [x] Scan Library in app menu; rescan adds/removes with toast summary
+- [x] Single Artist/Album|Singles organise layout; prune empty dirs on apply/undo
+- [x] Prune orphan artists/albums after track removal and scan
 - [ ] Wire artist portrait download into library fill + show portraits/initials in Artists UI
 - [ ] MPRIS: update status on pause/play; seek handler or clear `can_seek`; Raise or clear `can_raise`
 - [ ] Playlist delete / rename in UI
@@ -34,6 +37,7 @@ Check items off only when behaviour is verified in the running app, not when a s
 - [ ] Track-change notifications
 - [ ] Open folder in file manager
 - [ ] List virtualization for large libraries
+- [ ] Persist organise undo across app restarts
 
 ## Packaging / Linux
 
@@ -45,4 +49,5 @@ Check items off only when behaviour is verified in the running app, not when a s
 
 - [x] README feature list honest about partial items
 - [x] Roadmap + TODO + architecture notes
+- [x] Docs updated for scan menu + Artist/Album|Singles organisation
 - [ ] Keep checklist updated at the end of every milestone branch

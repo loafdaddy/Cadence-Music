@@ -8,14 +8,14 @@ Cadence aims to feel like it ships with Fedora Workstation: **GTK4**, **libadwai
 
 ## Features (current)
 
-- Recursive library scanning with live folder watching
+- Recursive library scanning with live folder watching (menu **Scan Library** adds new tracks, removes missing ones, and toasts the delta)
 - SQLite-backed library with FTS5 search (grouped results: artists, albums, songs, genres, years, folders)
 - Library home, Artists, Albums, Songs, Playlists, Favourites, Recently Added
 - Compact playback dock + optional Now Playing overlay
 - GStreamer playback with queue, shuffle, and repeat
 - Album artwork extraction and local cache
 - Single-track metadata editing; optional MusicBrainz / Cover Art Archive lookup (library-wide pass is partial)
-- Non-destructive library organisation with preview and undo
+- Non-destructive library organisation: **Artist / Album**, or **Artist / Singles** when album is missing — preview, apply, and undo (empty folders cleaned up)
 - MPRIS media keys (play/pause/next/previous; seek not yet wired)
 - Flatpak packaging (manifest present; polish ongoing)
 
@@ -41,6 +41,8 @@ sudo dnf install gtk4-devel libadwaita-devel \
 ```bash
 cargo run -p cadence
 ```
+
+If you use the local `.deps` prefix for headers/libs, source `.envrc.build` (or run `./scripts/run-debug.sh` after `cargo build -p cadence`) before launching.
 
 ### Test
 

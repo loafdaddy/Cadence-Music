@@ -14,10 +14,16 @@
 - Grouped search; lookup progress; favourite toggles
 - Artist detail without per-track cover spam
 
-### Milestone 4 — Polish (this branch)
+### Milestone 4 — Polish
 - Dock height locked; artwork cannot resize the shell
 - Native context menus (`PopoverMenu`)
 - Full audit vs brief; documentation brought in sync with reality
+
+### Library scan & organisation (post–M4)
+- Scan Library moved to the app menu (removed from home)
+- Rescan reconciles disk ↔ DB: add new tracks, remove missing ones, toast added/removed
+- Single organise layout: Artist/Album, or Artist/Singles when album is missing
+- Empty directories pruned on organise apply/undo; orphan artists/albums pruned on track removal and after scan
 
 ## Next — proposed Milestone 5 (finish dead wiring first)
 
@@ -43,6 +49,7 @@ Priority order for the next development branch:
 - Desktop notifications on track change
 - “Open containing folder”
 - Stronger Flatpak portal coverage (sandbox music dirs beyond `xdg-music`)
+- Persist organise undo across sessions (today: in-memory last apply only)
 
 ## Explicitly deferred
 
