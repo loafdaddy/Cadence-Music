@@ -5,56 +5,41 @@ use serde::{Deserialize, Serialize};
 use crate::models::TrackMetadata;
 
 const UNKNOWN_ARTIST: &str = "Unknown Artist";
-const UNKNOWN_ALBUM: &str = "Unknown Album";
 const UNKNOWN_TITLE: &str = "Unknown Title";
 const UNKNOWN_GENRE: &str = "Unknown Genre";
 const COMPILATIONS: &str = "Compilations";
+const SINGLES: &str = "Singles";
 
-/// Built-in organization layouts described in the design brief.
+/// Built-in organization layout.
+///
+/// Tracks with an album go under `Artist/Album/…`; tracks without an album
+/// go under `Artist/Singles/…`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Preset {
-    /// `Album Artist/Album/01 Title`
-    ArtistAlbumTrack,
-    /// `Album Artist/2001 - Album/01 Title`
-    ArtistYearAlbumTrack,
-    /// `Genre/Album Artist/Album/01 Title`
-    GenreArtistAlbumTrack,
-    /// `Album Artist/Singles/Title` for tracks with no album.
-    ArtistSingles,
+    /// `Album Artist/Album/01 Title`, or `Album Artist/Singles/Title` when album is missing.
+    ArtistAlbum,
 }
 
 impl Preset {
-    /// The token pattern this preset expands to.
-    #[must_use]
-    pub fn pattern(self) -> &'static str {
-        match self {
-            Self::ArtistAlbumTrack => "{albumartist}/{album}/{track2} {title}",
-            Self::ArtistYearAlbumTrack => "{albumartist}/{year} - {album}/{track2} {title}",
-            Self::GenreArtistAlbumTrack => "{genre}/{albumartist}/{album}/{track2} {title}",
-            Self::ArtistSingles => "{albumartist}/Singles/{title}",
-        }
-    }
-
     /// A short human-readable label for settings UI.
     #[must_use]
     pub fn label(self) -> &'static str {
-        match self {
-            Self::ArtistAlbumTrack => "Artist / Album / Track",
-            Self::ArtistYearAlbumTrack => "Artist / Year - Album / Track",
-            Self::GenreArtistAlbumTrack => "Genre / Artist / Album / Track",
-            Self::ArtistSingles => "Artist / Singles",
-        }
+        "Artist / Album (or Singles)"
     }
 
-    /// Every preset, for populating a combo box.
+    /// Every preset (currently just one).
     #[must_use]
     pub fn all() -> &'static [Preset] {
-        &[
-            Self::ArtistAlbumTrack,
-            Self::ArtistYearAlbumTrack,
-            Self::GenreArtistAlbumTrack,
-            Self::ArtistSingles,
-        ]
+        &[Self::ArtistAlbum]
+    }
+
+    fn pattern_for(self, meta: &TrackMetadata) -> &'static str {
+        let _ = self;
+        if meta.album.as_deref().is_some_and(|a| !a.is_empty()) {
+            "{albumartist}/{album}/{track2} {title}"
+        } else {
+            "{albumartist}/Singles/{title}"
+        }
     }
 }
 
@@ -67,15 +52,15 @@ pub enum Template {
 
 impl Default for Template {
     fn default() -> Self {
-        Self::Preset(Preset::ArtistAlbumTrack)
+        Self::Preset(Preset::ArtistAlbum)
     }
 }
 
 impl Template {
-    fn pattern(&self) -> &str {
+    fn pattern_for(&self, meta: &TrackMetadata) -> String {
         match self {
-            Self::Preset(p) => p.pattern(),
-            Self::Custom(s) => s.as_str(),
+            Self::Preset(p) => p.pattern_for(meta).to_owned(),
+            Self::Custom(s) => s.clone(),
         }
     }
 
@@ -87,10 +72,15 @@ impl Template {
     #[must_use]
     pub fn render(&self, meta: &TrackMetadata) -> String {
         let mut segments: Vec<String> = self
-            .pattern()
+            .pattern_for(meta)
             .split('/')
-            .map(|segment| render_segment(segment, meta))
-            .map(|segment| sanitize_component(&segment))
+            .map(|segment| {
+                if segment == SINGLES {
+                    SINGLES.to_owned()
+                } else {
+                    sanitize_component(&render_segment(segment, meta))
+                }
+            })
             .filter(|segment| !segment.is_empty())
             .collect();
 
@@ -146,7 +136,7 @@ fn expand_token(token: &str, meta: &TrackMetadata) -> String {
     match token {
         "title" => s(&meta.title, UNKNOWN_TITLE),
         "artist" => s(&meta.artist, UNKNOWN_ARTIST),
-        "album" => s(&meta.album, UNKNOWN_ALBUM),
+        "album" => s(&meta.album, ""),
         "albumartist" => meta
             .album_artist
             .as_deref()
@@ -206,9 +196,25 @@ mod tests {
     }
 
     #[test]
-    fn renders_preset() {
-        let t = Template::Preset(Preset::ArtistYearAlbumTrack);
-        assert_eq!(t.render(&sample()), "Band/2001 - Great Album/03 Song");
+    fn renders_album_track() {
+        let t = Template::Preset(Preset::ArtistAlbum);
+        assert_eq!(t.render(&sample()), "Band/Great Album/03 Song");
+    }
+
+    #[test]
+    fn album_less_goes_under_singles() {
+        let mut meta = sample();
+        meta.album = None;
+        let rendered = Template::Preset(Preset::ArtistAlbum).render(&meta);
+        assert_eq!(rendered, "Band/Singles/Song");
+    }
+
+    #[test]
+    fn empty_album_goes_under_singles() {
+        let mut meta = sample();
+        meta.album = Some(String::new());
+        let rendered = Template::Preset(Preset::ArtistAlbum).render(&meta);
+        assert_eq!(rendered, "Band/Singles/Song");
     }
 
     #[test]
@@ -221,7 +227,7 @@ mod tests {
     fn compilations_are_grouped() {
         let mut meta = sample();
         meta.compilation = true;
-        let rendered = Template::Preset(Preset::ArtistAlbumTrack).render(&meta);
+        let rendered = Template::Preset(Preset::ArtistAlbum).render(&meta);
         assert!(rendered.starts_with("Compilations/"));
     }
 
@@ -230,7 +236,7 @@ mod tests {
         let mut meta = sample();
         meta.disc_number = Some(2);
         meta.disc_total = Some(2);
-        let rendered = Template::Preset(Preset::ArtistAlbumTrack).render(&meta);
+        let rendered = Template::Preset(Preset::ArtistAlbum).render(&meta);
         assert!(rendered.contains("/Disc 2/"), "got: {rendered}");
     }
 }

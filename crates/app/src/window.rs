@@ -357,6 +357,7 @@ impl CadenceWindow {
 fn build_menu() -> gio::Menu {
     let menu = gio::Menu::new();
     menu.append(Some("Preferences"), Some("win.preferences"));
+    menu.append(Some("Scan Library"), Some("win.scan-library"));
     menu.append(Some("Organise Library"), Some("win.organize"));
     menu.append(Some("Edit Metadata"), Some("win.edit-metadata"));
     menu.append(Some("Lookup Metadata"), Some("win.lookup-metadata"));
@@ -545,14 +546,16 @@ fn wire_library_events(state: &Rc<AppState>, rx: std::sync::mpsc::Receiver<Libra
         LibraryEvent::LookupProgress { phase, done, total } => {
             set_lookup_busy(&state, true, &format!("{done}/{total} — {phase}"));
         }
-        LibraryEvent::ScanFinished { imported } => {
+        LibraryEvent::ScanFinished { summary } => {
             state.scan_banner.set_revealed(false);
-            state.toast.add_toast(
-                adw::Toast::builder()
-                    .title(format!("Imported {imported} tracks"))
-                    .timeout(3)
-                    .build(),
-            );
+            if let Some(title) = summary.toast_message() {
+                state.toast.add_toast(
+                    adw::Toast::builder()
+                        .title(title)
+                        .timeout(4)
+                        .build(),
+                );
+            }
             state.has_library.set(true);
             show_nav(&state, state.nav.get());
         }
@@ -1260,18 +1263,6 @@ fn wire_add_folder(
 fn wire_home_actions(state: &Rc<AppState>, window: &adw::ApplicationWindow) {
     {
         let state_cb = Rc::clone(state);
-        state.home.scan_button.connect_clicked(move |_| {
-            state_cb.scan_banner.set_title("Scanning library…");
-            state_cb.scan_banner.set_revealed(true);
-            let toast = state_cb.toast.clone();
-            state_cb.library.scan_all(move |result| match result {
-                Ok(n) => toast.add_toast(adw::Toast::new(&format!("Scan finished — {n} tracks"))),
-                Err(err) => toast.add_toast(adw::Toast::new(&err.to_string())),
-            });
-        });
-    }
-    {
-        let state_cb = Rc::clone(state);
         let window = window.clone();
         state.home.organise_button.connect_clicked(move |_| {
             open_organise(&state_cb, &window);
@@ -1283,7 +1274,6 @@ fn wire_home_actions(state: &Rc<AppState>, window: &adw::ApplicationWindow) {
             run_library_lookup(&state_cb);
         });
     }
-    let _ = window;
 }
 
 fn set_lookup_busy(state: &AppState, busy: bool, detail: &str) {
@@ -1436,6 +1426,25 @@ fn wire_actions(state: &Rc<AppState>, window: &adw::ApplicationWindow) {
         });
     }
     window.add_action(&prefs);
+
+    let scan_library = gio::SimpleAction::new("scan-library", None);
+    {
+        let state = Rc::clone(state);
+        scan_library.connect_activate(move |_, _| {
+            state.scan_banner.set_title("Scanning library…");
+            state.scan_banner.set_revealed(true);
+            let state_cb = Rc::clone(&state);
+            state.library.scan_all(move |result| {
+                if let Err(err) = result {
+                    state_cb.scan_banner.set_revealed(false);
+                    state_cb
+                        .toast
+                        .add_toast(adw::Toast::new(&err.to_string()));
+                }
+            });
+        });
+    }
+    window.add_action(&scan_library);
 
     let organize = gio::SimpleAction::new("organize", None);
     {

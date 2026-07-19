@@ -20,7 +20,6 @@ pub struct LibraryHome {
     recent_albums_box: gtk::FlowBox,
     recent_tracks_box: gtk::Box,
     stats_label: gtk::Label,
-    pub scan_button: gtk::Button,
     pub organise_button: gtk::Button,
     pub lookup_button: gtk::Button,
     on_play: Rc<RefCell<Option<Box<dyn Fn(Vec<TrackDisplay>, usize)>>>>,
@@ -54,13 +53,11 @@ impl LibraryHome {
             .margin_bottom(8)
             .build();
 
-        let scan_button = pill_button("Scan Library", "view-refresh-symbolic");
         let organise_button = pill_button("Organise Files", "folder-symbolic");
         let lookup_button = pill_button("Find Missing Metadata", "edit-find-symbolic");
 
         let actions = gtk::Box::new(gtk::Orientation::Horizontal, 10);
         actions.set_margin_bottom(8);
-        actions.append(&scan_button);
         actions.append(&organise_button);
         actions.append(&lookup_button);
 
@@ -105,7 +102,6 @@ impl LibraryHome {
             recent_albums_box,
             recent_tracks_box,
             stats_label,
-            scan_button,
             organise_button,
             lookup_button,
             on_play: Rc::new(RefCell::new(None)),

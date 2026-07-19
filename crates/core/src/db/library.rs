@@ -365,7 +365,7 @@ impl Database {
             .execute("DELETE FROM track_search WHERE rowid = ?1", params![i64::from(id)])?;
         self.conn
             .execute("DELETE FROM tracks WHERE id = ?1", params![i64::from(id)])?;
-        self.prune_empty_albums()?;
+        self.prune_orphans()?;
         Ok(())
     }
 
@@ -387,6 +387,7 @@ impl Database {
         let _ = self
             .conn
             .execute("DELETE FROM albums WHERE id = ?1", params![i64::from(id)]);
+        self.prune_orphans()?;
         Ok(removed)
     }
 
@@ -396,6 +397,28 @@ impl Database {
              (SELECT DISTINCT album_id FROM tracks WHERE album_id IS NOT NULL)",
             [],
         )?;
+        Ok(())
+    }
+
+    /// Drop artist rows no longer referenced by any track or album.
+    pub fn prune_empty_artists(&self) -> Result<()> {
+        self.conn.execute(
+            "DELETE FROM artists WHERE id NOT IN (\
+                 SELECT artist_id FROM tracks WHERE artist_id IS NOT NULL \
+                 UNION \
+                 SELECT album_artist_id FROM tracks WHERE album_artist_id IS NOT NULL \
+                 UNION \
+                 SELECT album_artist_id FROM albums WHERE album_artist_id IS NOT NULL\
+             )",
+            [],
+        )?;
+        Ok(())
+    }
+
+    /// Remove albums with no tracks, then artists with no remaining references.
+    pub fn prune_orphans(&self) -> Result<()> {
+        self.prune_empty_albums()?;
+        self.prune_empty_artists()?;
         Ok(())
     }
 
@@ -410,6 +433,20 @@ impl Database {
             )
             .optional()?;
         Ok(id.map(TrackId))
+    }
+
+    /// Absolute paths of every track whose file lives under `root`.
+    pub fn track_paths_under(&self, root: &Path) -> Result<Vec<PathBuf>> {
+        let mut stmt = self.conn.prepare("SELECT path FROM tracks")?;
+        let rows = stmt.query_map([], |row| row.get::<_, String>(0))?;
+        let mut out = Vec::new();
+        for path_str in rows {
+            let path = PathBuf::from(path_str?);
+            if path.starts_with(root) {
+                out.push(path);
+            }
+        }
+        Ok(out)
     }
 
     /// Fetch a single track by id.
@@ -1020,6 +1057,46 @@ mod tests {
         let lists = db.playlists().unwrap();
         assert_eq!(lists.len(), 1);
         assert_eq!(lists[0].track_ids, vec![id]);
+    }
+
+    #[test]
+    fn removing_last_track_prunes_artist_and_album() {
+        let db = Database::open_in_memory().unwrap();
+        let id = db
+            .upsert_track(
+                &discovered("/m/only.flac"),
+                &meta("Only", "Gone Artist", "Gone Album"),
+            )
+            .unwrap();
+        assert_eq!(db.list_artists().unwrap().len(), 1);
+        assert_eq!(db.list_albums().unwrap().len(), 1);
+
+        db.remove_track(id).unwrap();
+        assert!(db.list_artists().unwrap().is_empty());
+        assert!(db.list_albums().unwrap().is_empty());
+    }
+
+    #[test]
+    fn prune_orphans_cleans_stale_artist_rows() {
+        let db = Database::open_in_memory().unwrap();
+        let id = db
+            .upsert_track(
+                &discovered("/m/stale.flac"),
+                &meta("T", "Stale Artist", "Stale Album"),
+            )
+            .unwrap();
+        // Simulate older Cadence that deleted the track without pruning artists.
+        db.conn
+            .execute("DELETE FROM track_search WHERE rowid = ?1", [i64::from(id)])
+            .unwrap();
+        db.conn
+            .execute("DELETE FROM tracks WHERE id = ?1", [i64::from(id)])
+            .unwrap();
+        assert_eq!(db.list_artists().unwrap().len(), 1);
+
+        db.prune_orphans().unwrap();
+        assert!(db.list_artists().unwrap().is_empty());
+        assert!(db.list_albums().unwrap().is_empty());
     }
 
     #[test]

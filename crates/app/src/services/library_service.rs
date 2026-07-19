@@ -24,7 +24,7 @@ use glib::ControlFlow;
 #[derive(Debug, Clone)]
 pub enum LibraryEvent {
     ScanProgress { done: usize, total: usize },
-    ScanFinished { imported: usize },
+    ScanFinished { summary: ScanSummary },
     /// Progress while filling missing metadata / artist photos.
     LookupProgress {
         phase: String,
@@ -33,6 +33,32 @@ pub enum LibraryEvent {
     },
     LibraryChanged,
     Error(String),
+}
+
+/// Result of scanning a library folder (or all folders).
+#[derive(Debug, Clone, Default)]
+pub struct ScanSummary {
+    pub added: usize,
+    pub removed: usize,
+    pub updated: usize,
+}
+
+impl ScanSummary {
+    pub fn merge(&mut self, other: ScanSummary) {
+        self.added += other.added;
+        self.removed += other.removed;
+        self.updated += other.updated;
+    }
+
+    #[must_use]
+    pub fn toast_message(&self) -> Option<String> {
+        match (self.added, self.removed) {
+            (0, 0) => None,
+            (a, 0) => Some(format!("Added {a} tracks")),
+            (0, r) => Some(format!("Removed {r} tracks")),
+            (a, r) => Some(format!("Added {a}, removed {r} tracks")),
+        }
+    }
 }
 
 /// Summary from a library-wide “Find Missing Metadata” pass.
@@ -60,7 +86,7 @@ enum Command {
         reply: SyncSender<Result<Vec<PathBuf>>>,
     },
     ScanAll {
-        reply: SyncSender<Result<usize>>,
+        reply: SyncSender<Result<ScanSummary>>,
     },
     ListArtists {
         reply: SyncSender<Result<Vec<Artist>>>,
@@ -301,7 +327,7 @@ impl LibraryService {
         self.call(|reply| Command::ListFolders { reply }, cont);
     }
 
-    pub fn scan_all(&self, cont: impl FnOnce(Result<usize>) + 'static) {
+    pub fn scan_all(&self, cont: impl FnOnce(Result<ScanSummary>) + 'static) {
         self.call(|reply| Command::ScanAll { reply }, cont);
     }
 
@@ -693,8 +719,8 @@ fn worker_main(cmd_rx: Receiver<Command>, event_tx: Sender<LibraryEvent>) {
                     Ok(())
                 })();
                 let _ = reply.send(result);
-                if let Ok(count) = scan_folder(&db, &path, &event_tx) {
-                    let _ = event_tx.send(LibraryEvent::ScanFinished { imported: count });
+                if let Ok(summary) = scan_folder(&db, &path, &event_tx) {
+                    let _ = event_tx.send(LibraryEvent::ScanFinished { summary });
                     let _ = event_tx.send(LibraryEvent::LibraryChanged);
                 }
             }
@@ -709,15 +735,15 @@ fn worker_main(cmd_rx: Receiver<Command>, event_tx: Sender<LibraryEvent>) {
             }
             Command::ScanAll { reply } => {
                 let result = (|| {
-                    let mut total = 0usize;
+                    let mut summary = ScanSummary::default();
                     for folder in db.library_folders()? {
-                        total += scan_folder(&db, &folder, &event_tx)?;
+                        summary.merge(scan_folder(&db, &folder, &event_tx)?);
                     }
-                    Ok(total)
+                    Ok(summary)
                 })();
-                if let Ok(imported) = &result {
+                if let Ok(summary) = &result {
                     let _ = event_tx.send(LibraryEvent::ScanFinished {
-                        imported: *imported,
+                        summary: summary.clone(),
                     });
                     let _ = event_tx.send(LibraryEvent::LibraryChanged);
                 }
@@ -1190,10 +1216,22 @@ fn fill_missing_metadata_run(
     Ok(summary)
 }
 
-fn scan_folder(db: &Database, root: &Path, event_tx: &Sender<LibraryEvent>) -> Result<usize> {
+fn scan_folder(db: &Database, root: &Path, event_tx: &Sender<LibraryEvent>) -> Result<ScanSummary> {
     let discovered = scanner::discover(root);
+    let on_disk: std::collections::HashSet<PathBuf> =
+        discovered.iter().map(|f| f.path.clone()).collect();
+
+    let mut removed = 0usize;
+    for path in db.track_paths_under(root)? {
+        if !on_disk.contains(&path) {
+            db.remove_track_by_path(&path)?;
+            removed += 1;
+        }
+    }
+
     let total = discovered.len();
-    let mut imported = 0usize;
+    let mut added = 0usize;
+    let mut updated = 0usize;
     let mut batch = Vec::new();
 
     for (idx, file) in discovered.into_iter().enumerate() {
@@ -1203,8 +1241,13 @@ fn scan_folder(db: &Database, root: &Path, event_tx: &Sender<LibraryEvent>) -> R
         if batch.len() >= 64 || idx + 1 == total {
             let scanned = scanner::scan_files(std::mem::take(&mut batch));
             for item in scanned {
+                let is_new = db.track_id_by_path(&item.file.path)?.is_none();
                 upsert_with_artwork(db, &item.file, &item.metadata)?;
-                imported += 1;
+                if is_new {
+                    added += 1;
+                } else {
+                    updated += 1;
+                }
             }
             let _ = event_tx.send(LibraryEvent::ScanProgress {
                 done: idx + 1,
@@ -1212,7 +1255,13 @@ fn scan_folder(db: &Database, root: &Path, event_tx: &Sender<LibraryEvent>) -> R
             });
         }
     }
-    Ok(imported)
+    // Clear artists/albums left behind by earlier removals that didn't prune.
+    db.prune_orphans()?;
+    Ok(ScanSummary {
+        added,
+        removed,
+        updated,
+    })
 }
 
 fn ingest_path(db: &Database, path: &Path) -> Result<()> {

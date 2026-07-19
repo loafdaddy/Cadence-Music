@@ -149,8 +149,11 @@ impl OrganizationPlan {
                     m.to.display()
                 )));
             }
+            let from_parent = m.from.parent().map(Path::to_path_buf);
             std::fs::rename(&m.from, &m.to)?;
             log.moves.push(m.clone());
+            // Drop empty album / singles folders left behind by the move.
+            prune_empty_ancestors(from_parent.as_deref());
         }
         Ok(())
     }
@@ -166,18 +169,29 @@ impl UndoLog {
     /// Reverse every recorded move, most recent first.
     ///
     /// Empty directories left behind by the original operation are removed on a
-    /// best-effort basis.
+    /// best-effort basis (walking up the tree, not just the immediate parent).
     pub fn undo(&self) -> Result<()> {
         for m in self.moves.iter().rev() {
             if let Some(parent) = m.from.parent() {
                 std::fs::create_dir_all(parent)?;
             }
+            let to_parent = m.to.parent().map(Path::to_path_buf);
             std::fs::rename(&m.to, &m.from)?;
-            if let Some(parent) = m.to.parent() {
-                let _ = std::fs::remove_dir(parent); // Only succeeds if empty.
-            }
+            prune_empty_ancestors(to_parent.as_deref());
         }
         Ok(())
+    }
+}
+
+/// Remove `start` and its empty ancestors. Stops at the first non-empty
+/// directory or filesystem error (`remove_dir` only succeeds when empty).
+fn prune_empty_ancestors(start: Option<&Path>) {
+    let mut current = start.map(Path::to_path_buf);
+    while let Some(dir) = current {
+        match std::fs::remove_dir(&dir) {
+            Ok(()) => current = dir.parent().map(Path::to_path_buf),
+            Err(_) => break,
+        }
     }
 }
 
@@ -196,6 +210,15 @@ mod tests {
         }
     }
 
+    fn single_meta(title: &str) -> TrackMetadata {
+        TrackMetadata {
+            title: Some(title.to_owned()),
+            album_artist: Some("Artist".to_owned()),
+            album: None,
+            ..Default::default()
+        }
+    }
+
     #[test]
     fn build_and_execute_and_undo() {
         let src = tempfile::tempdir().unwrap();
@@ -206,7 +229,7 @@ mod tests {
 
         let plan = OrganizationPlan::build(
             lib.path(),
-            &Template::Preset(Preset::ArtistAlbumTrack),
+            &Template::Preset(Preset::ArtistAlbum),
             [(f1.clone(), meta(1))],
         );
         assert_eq!(plan.move_count(), 1);
@@ -219,6 +242,58 @@ mod tests {
         log.undo().unwrap();
         assert!(f1.exists());
         assert!(!dest.exists());
+        // Organised folders should be cleaned up on undo.
+        assert!(!lib.path().join("Artist/Album").exists());
+        assert!(!lib.path().join("Artist").exists());
+    }
+
+    #[test]
+    fn singles_and_albums_clean_up_on_undo() {
+        let src = tempfile::tempdir().unwrap();
+        let lib = tempfile::tempdir().unwrap();
+
+        let album_file = src.path().join("album.mp3");
+        let single_file = src.path().join("single.mp3");
+        std::fs::write(&album_file, b"album").unwrap();
+        std::fs::write(&single_file, b"single").unwrap();
+
+        let plan = OrganizationPlan::build(
+            lib.path(),
+            &Template::Preset(Preset::ArtistAlbum),
+            [
+                (album_file.clone(), meta(1)),
+                (single_file.clone(), single_meta("Lonely")),
+            ],
+        );
+        let log = plan.execute().unwrap();
+        assert!(lib.path().join("Artist/Album/01 Track 1.mp3").exists());
+        assert!(lib.path().join("Artist/Singles/Lonely.mp3").exists());
+
+        log.undo().unwrap();
+        assert!(album_file.exists());
+        assert!(single_file.exists());
+        assert!(!lib.path().join("Artist/Album").exists());
+        assert!(!lib.path().join("Artist/Singles").exists());
+        assert!(!lib.path().join("Artist").exists());
+    }
+
+    #[test]
+    fn execute_prunes_empty_source_dirs() {
+        let lib = tempfile::tempdir().unwrap();
+        let nested = lib.path().join("Messy/Unknown Album");
+        std::fs::create_dir_all(&nested).unwrap();
+        let from = nested.join("song.mp3");
+        std::fs::write(&from, b"x").unwrap();
+
+        let plan = OrganizationPlan::build(
+            lib.path(),
+            &Template::Preset(Preset::ArtistAlbum),
+            [(from.clone(), single_meta("song"))],
+        );
+        plan.execute().unwrap();
+        assert!(lib.path().join("Artist/Singles/song.mp3").exists());
+        assert!(!lib.path().join("Messy/Unknown Album").exists());
+        assert!(!lib.path().join("Messy").exists());
     }
 
     #[test]
@@ -233,7 +308,7 @@ mod tests {
         // Both files render to the same destination (identical metadata).
         let plan = OrganizationPlan::build(
             lib.path(),
-            &Template::Preset(Preset::ArtistAlbumTrack),
+            &Template::Preset(Preset::ArtistAlbum),
             [(f1, meta(1)), (f2, meta(1))],
         );
         assert_eq!(plan.move_count(), 1);

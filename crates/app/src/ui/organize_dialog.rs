@@ -4,11 +4,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use adw::prelude::*;
-use cadence_core::organization::{OrganizationPlan, PlanEntry, Preset, Template};
+use cadence_core::organization::{OrganizationPlan, PlanEntry, Template};
 
 pub struct OrganizeDialog {
     pub window: adw::Window,
-    pub preset: gtk::DropDown,
     list: gtk::ListBox,
     status: gtk::Label,
     apply_button: gtk::Button,
@@ -19,9 +18,6 @@ pub struct OrganizeDialog {
 impl OrganizeDialog {
     #[must_use]
     pub fn new(parent: &impl IsA<gtk::Window>) -> Self {
-        let labels: Vec<&str> = Preset::all().iter().map(|p| p.label()).collect();
-        let preset = gtk::DropDown::from_strings(&labels);
-
         let list = gtk::ListBox::builder()
             .selection_mode(gtk::SelectionMode::None)
             .css_classes(["boxed-list"])
@@ -33,7 +29,7 @@ impl OrganizeDialog {
             .build();
 
         let status = gtk::Label::builder()
-            .label("Choose a template, then preview the proposed moves.")
+            .label("Preview the proposed moves, then apply. You can undo afterwards.")
             .xalign(0.0)
             .wrap(true)
             .css_classes(["dim-label"])
@@ -73,14 +69,15 @@ impl OrganizeDialog {
         );
         content.append(
             &gtk::Label::builder()
-                .label("Preview file moves before anything changes on disk. You can undo afterwards.")
+                .label(
+                    "Files are arranged as Artist / Album. Tracks without an album \
+                     go under Artist / Singles. Preview before anything changes on disk.",
+                )
                 .xalign(0.0)
                 .wrap(true)
                 .css_classes(["dim-label"])
                 .build(),
         );
-        content.append(&gtk::Label::builder().label("Template").xalign(0.0).build());
-        content.append(&preset);
         content.append(&status);
         content.append(&scrolled);
         content.append(&buttons);
@@ -101,7 +98,6 @@ impl OrganizeDialog {
 
         Self {
             window,
-            preset,
             list,
             status,
             apply_button,
@@ -112,13 +108,7 @@ impl OrganizeDialog {
 
     #[must_use]
     pub fn selected_template(&self) -> Template {
-        let idx = self.preset.selected() as usize;
-        Template::Preset(
-            Preset::all()
-                .get(idx)
-                .copied()
-                .unwrap_or(Preset::ArtistAlbumTrack),
-        )
+        Template::default()
     }
 
     pub fn present(&self) {
@@ -140,7 +130,8 @@ impl OrganizeDialog {
 
     pub fn set_busy(&self, busy: bool) {
         self.preview_button.set_sensitive(!busy);
-        self.apply_button.set_sensitive(!busy && self.plan.borrow().is_some());
+        self.apply_button
+            .set_sensitive(!busy && self.plan.borrow().is_some());
         if busy {
             self.status.set_label("Building preview…");
         }
@@ -182,10 +173,9 @@ impl OrganizeDialog {
                     format!("{}  →  {}", m.from.display(), m.to.display()),
                     "",
                 ),
-                PlanEntry::Conflict { r#move } => (
-                    format!("Conflict — {}", r#move.to.display()),
-                    "error",
-                ),
+                PlanEntry::Conflict { r#move } => {
+                    (format!("Conflict — {}", r#move.to.display()), "error")
+                }
             };
             let row = gtk::Label::builder()
                 .label(label)
