@@ -47,8 +47,8 @@ pub fn run() -> glib::ExitCode {
                 .version(env!("CARGO_PKG_VERSION"))
                 .comments("A modern, native music library for Linux.")
                 .license_type(gtk::License::Gpl30)
-                .website("https://github.com/cadence-music/cadence")
-                .issue_url("https://github.com/cadence-music/cadence/issues")
+                .website("https://github.com/loafdaddy/Cadence-Music")
+                .issue_url("https://github.com/loafdaddy/Cadence-Music/issues")
                 .modal(true);
             if let Some(parent) = app.active_window() {
                 builder = builder.transient_for(&parent);

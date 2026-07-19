@@ -11,7 +11,7 @@ use serde::Deserialize;
 use crate::error::{Error, Result};
 use crate::models::TrackMetadata;
 
-const USER_AGENT: &str = "Cadence/0.1.0 (https://github.com/cadence-music/cadence)";
+const USER_AGENT: &str = "Cadence/0.1.0 (https://github.com/loafdaddy/Cadence-Music)";
 const MB_BASE: &str = "https://musicbrainz.org/ws/2";
 const CAA_BASE: &str = "https://coverartarchive.org";
 

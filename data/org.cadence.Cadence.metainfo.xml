@@ -6,8 +6,8 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <developer_name>The Cadence Contributors</developer_name>
-  <url type="homepage">https://github.com/cadence-music/cadence</url>
-  <url type="bugtracker">https://github.com/cadence-music/cadence/issues</url>
+  <url type="homepage">https://github.com/loafdaddy/Cadence-Music</url>
+  <url type="bugtracker">https://github.com/loafdaddy/Cadence-Music/issues</url>
   <description>
     <p>
       Cadence is a lightweight GTK4 music library application for Linux.

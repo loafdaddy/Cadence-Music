@@ -8,8 +8,8 @@ edition = "2021"
 rust-version = "1.80"
 license = "GPL-3.0-or-later"
 authors = ["The Cadence Contributors"]
-repository = "https://github.com/cadence-music/cadence"
-homepage = "https://github.com/cadence-music/cadence"
+repository = "https://github.com/loafdaddy/Cadence-Music"
+homepage = "https://github.com/loafdaddy/Cadence-Music"
 description = "A modern, native music library application for Linux"
 
 [workspace.dependencies]

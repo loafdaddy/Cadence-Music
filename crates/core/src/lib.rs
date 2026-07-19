@@ -1,6 +1,6 @@
 //! # cadence-core
 //!
-//! The engine behind [Cadence](https://github.com/cadence-music/cadence), a
+//! The engine behind [Cadence](https://github.com/loafdaddy/Cadence-Music), a
 //! native GTK4 music library application for Linux.
 //!
 //! This crate contains everything that is *not* the GUI: the SQLite-backed
