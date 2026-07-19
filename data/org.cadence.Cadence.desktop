@@ -1,12 +1,11 @@
 [Desktop Entry]
 Name=Cadence
 GenericName=Music Player
-Comment=A modern, native music library for Linux
+Comment=A modern, native music library for Linux (early beta)
 Exec=cadence
 Icon=org.cadence.Cadence
 Terminal=false
 Type=Application
 Categories=AudioVideo;Audio;Player;GTK;
-Keywords=music;player;library;audio;
+Keywords=music;player;library;audio;cadence;
 StartupNotify=true
-DBusActivatable=true

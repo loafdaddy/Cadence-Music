@@ -2,7 +2,7 @@
 
 Single living status list. Keep it honest: only check items when verified in the running app.
 
-Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md)
+Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md) · [INSTALL.md](INSTALL.md) · [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ---
 
@@ -33,6 +33,8 @@ Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md)
 
 ### Docs hygiene
 - [x] README and docs match implementation (no separate spec checklist)
+- [x] CONTRIBUTING + INSTALL for Flatpak beta and from-source development
+- [x] Cadence. wordmark in header; brand SVGs for GitHub README
 
 ---
 
@@ -84,8 +86,9 @@ Finish dead wiring before new surfaces:
 - [ ] Track-change notifications
 - [ ] Open containing folder / drag-and-drop
 - [ ] Persist organise undo across sessions
-- [ ] Flatpak verified end-to-end; portal-backed folders beyond `xdg-music`
+- [ ] Flatpak verified end-to-end on a clean user install; portals beyond `xdg-music`
 - [ ] MPRIS Raise / desktop entry activation
+- [ ] Publish to Flathub (after beta stabilises)
 
 ---
 

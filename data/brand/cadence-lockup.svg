@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="160" viewBox="0 0 640 160" role="img" aria-label="Cadence.">
+  <defs>
+    <linearGradient id="bg" x1="18%" y1="0%" x2="82%" y2="100%">
+      <stop offset="0%" stop-color="#2A1848"/>
+      <stop offset="55%" stop-color="#1A102F"/>
+      <stop offset="100%" stop-color="#0E0A1A"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#C4A8FF"/>
+      <stop offset="45%" stop-color="#A882FF"/>
+      <stop offset="100%" stop-color="#7C5CFF"/>
+    </linearGradient>
+    <linearGradient id="facet" x1="30%" y1="10%" x2="70%" y2="90%">
+      <stop offset="0%" stop-color="#B794FF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#6E4FE0" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mark -->
+  <g transform="translate(16,16)">
+    <rect width="128" height="128" rx="30" fill="url(#bg)"/>
+    <circle cx="64" cy="64" r="42" fill="#A882FF" opacity="0.08"/>
+    <path
+      fill="url(#facet)"
+      d="M78 34c-16.5 0-30 13-30 30s13.5 30 30 30c7.2 0 13.8-2.4 19-6.5l-7.2-8.8c-3.2 2.4-7.2 3.8-11.8 3.8-10.5 0-19-8.3-19-18.5S67.5 45.5 78 45.5c4.6 0 8.6 1.4 11.8 3.8l7.2-8.8C91.8 36.4 85.2 34 78 34z"/>
+    <path
+      fill="none"
+      stroke="url(#pulse)"
+      stroke-width="5.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M58 64h8 M70 52v24 M80 58v12"/>
+  </g>
+
+  <!-- Wordmark: serif stack inspired by quiet, literary apps (not Obsidian's mark) -->
+  <text
+    x="168"
+    y="102"
+    fill="#F4F0FF"
+    font-family="Iowan Old Style, Palatino Linotype, Palatino, Book Antiqua, Georgia, serif"
+    font-size="72"
+    font-weight="600"
+    letter-spacing="1.5">Cadence</text>
+  <text
+    x="512"
+    y="102"
+    fill="#A882FF"
+    font-family="Iowan Old Style, Palatino Linotype, Palatino, Book Antiqua, Georgia, serif"
+    font-size="72"
+    font-weight="600">.</text>
+</svg>

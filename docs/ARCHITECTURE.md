@@ -33,6 +33,7 @@ ApplicationWindow
 - **Dock:** permanent compact player (~96px). Artwork is clipped and scaled; it must never change dock height.
 - **Now Playing:** immersive overlay revealed from the dock artwork; not the default chrome.
 - **App menu:** Preferences, Scan Library, Organise Library, Edit / Lookup Metadata, Undo Organisation, About, Quit.
+- **Header brand:** app icon + wordmark **Cadence.** (serif stack, purple period).
 - **Home actions:** Organise Files and Find Missing Metadata (Scan lives in the menu only).
 - **Lookup progress:** header spinner + tooltip (not the scan Banner).
 
@@ -65,6 +66,8 @@ ApplicationWindow
 ## Flatpak
 
 - Manifest: `build-aux/org.cadence.Cadence.yml`
+- Local beta install: `./scripts/build-flatpak.sh` then `flatpak run org.cadence.Cadence`
 - Runtime: GNOME 48; owns `org.mpris.MediaPlayer2.Cadence`
 - Default music access: `xdg-music:rw`; other locations rely on document portal grants when chosen via `FileDialog`
 - Finish-args also declare FileChooser, Documents, Notification, and OpenURI portals (Notification unused so far)
+- Not on Flathub yet — see [INSTALL.md](INSTALL.md)

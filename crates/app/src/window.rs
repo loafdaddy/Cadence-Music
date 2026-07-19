@@ -90,6 +90,7 @@ impl CadenceWindow {
             .build();
         header.set_title_widget(Some(&search_entry));
 
+        let brand = brand_widget();
         let add_btn = gtk::Button::from_icon_name("folder-new-symbolic");
         add_btn.set_tooltip_text(Some("Add Music Folder"));
         let lookup_spinner = gtk::Spinner::builder()
@@ -100,6 +101,7 @@ impl CadenceWindow {
             .icon_name("open-menu-symbolic")
             .menu_model(&build_menu())
             .build();
+        header.pack_start(&brand);
         header.pack_start(&add_btn);
         header.pack_end(&menu_btn);
         header.pack_end(&lookup_spinner);
@@ -352,6 +354,27 @@ impl CadenceWindow {
     pub fn present(&self) {
         self.window.present();
     }
+}
+
+fn brand_widget() -> gtk::Box {
+    let icon = gtk::Image::from_icon_name(cadence_core::APP_ID);
+    icon.set_pixel_size(28);
+    icon.add_css_class("cadence-brand-icon");
+
+    let name = gtk::Label::builder()
+        .use_markup(true)
+        .label("Cadence<span foreground=\"#A882FF\">.</span>")
+        .css_classes(["cadence-brand"])
+        .valign(gtk::Align::Center)
+        .build();
+
+    let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
+    row.add_css_class("cadence-brand-row");
+    row.set_margin_start(4);
+    row.set_margin_end(8);
+    row.append(&icon);
+    row.append(&name);
+    row
 }
 
 fn build_menu() -> gio::Menu {

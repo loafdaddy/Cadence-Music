@@ -1,6 +1,7 @@
 # Cadence — Development Roadmap
 
-High-level history and direction. Day-to-day status lives in [TODO.md](TODO.md).
+High-level history and direction. Day-to-day status: [TODO.md](TODO.md).
+Install / contribute: [INSTALL.md](INSTALL.md) · [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Done
 
@@ -12,31 +13,28 @@ High-level history and direction. Day-to-day status lives in [TODO.md](TODO.md).
 
 ### Milestone 3 — UX redesign
 - Library-first layout; compact playback dock; Now Playing overlay
-- Library home (Continue, recent albums/tracks, stats)
-- Grouped search; lookup progress; favourite toggles
-- Artist detail without per-track cover spam
+- Library home; grouped search; lookup progress; favourites
 
 ### Milestone 4 — Polish
-- Dock height locked; artwork cannot resize the shell
-- Native context menus (`PopoverMenu`)
-- Documentation brought in sync with reality
+- Dock height locked; native context menus; docs synced with reality
 
 ### Library scan and organisation
-- Scan Library in the app menu (removed from home)
-- Rescan reconciles disk and DB: add, remove, toast delta; prune orphan artists/albums
-- Single organise layout: Artist/Album, or Artist/Singles when album is missing
-- Empty directories pruned on organise apply/undo
+- Scan in app menu; disk/DB reconcile; Artist/Album or Singles; orphan prune
+
+### Branding and first Flatpak beta
+- Cadence. wordmark + app icon (dark / purple accent)
+- Contributor docs; INSTALL from Flatpak and from source
+- `scripts/build-flatpak.sh` for local beta installs
 
 ## Next
 
-Proposed Milestone 5: finish dead wiring first (see [TODO.md](TODO.md) “Next”).
-
-Then expand browsers (album page, Genres), search stubs, and large-library lists.
+Finish dead wiring (see TODO “Next”), then browsers and large-library work.
+Get Flatpak verified on clean installs; Flathub later if the beta holds up.
 
 ## Later
 
-Gapless / ReplayGain / crossfade, batch metadata, smart playlists / M3U, mini player,
-notifications, open-folder, stronger Flatpak portals, persisted organise undo.
+Gapless / ReplayGain, batch metadata, smart playlists / M3U, mini player,
+notifications, open-folder, stronger portals, persisted organise undo.
 
 ## Explicitly deferred
 

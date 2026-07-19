@@ -1,5 +1,20 @@
 /* Cadence — restrained polish on Adwaita */
 
+.cadence-brand-row {
+  margin-end: 4px;
+}
+
+.cadence-brand-icon {
+  margin-top: 1px;
+}
+
+.cadence-brand {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .cadence-player {
   min-height: 96px;
   background-color: alpha(@window_bg_color, 0.94);

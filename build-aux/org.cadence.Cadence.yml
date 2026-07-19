@@ -1,5 +1,11 @@
-# Flatpak manifest for Cadence.
-# Build: flatpak-builder --user --install --force-clean build-dir build-aux/org.cadence.Cadence.yml
+# Flatpak manifest for Cadence (first public beta).
+#
+# Quick path (from repo root):
+#   ./scripts/build-flatpak.sh
+#   flatpak run org.cadence.Cadence
+#
+# Manual:
+#   flatpak-builder --user --install --force-clean build-dir build-aux/org.cadence.Cadence.yml
 
 app-id: org.cadence.Cadence
 runtime: org.gnome.Platform
@@ -25,6 +31,9 @@ finish-args:
   - --filesystem=xdg-music:rw
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
+  # Allow crates.io during the first beta builds (vendor later for Flathub).
+  build-args:
+    - --share=network
   env:
     CARGO_HOME: /run/build/cadence/cargo
     RUST_BACKTRACE: '1'
@@ -32,8 +41,8 @@ modules:
   - name: cadence
     buildsystem: simple
     build-commands:
-      - cargo --offline fetch --manifest-path Cargo.toml --verbose || cargo fetch --manifest-path Cargo.toml --verbose
-      - cargo --offline build --release --verbose || cargo build --release --verbose
+      - cargo fetch --manifest-path Cargo.toml --verbose
+      - cargo build --release --verbose
       - install -Dm755 target/release/cadence /app/bin/cadence
       - install -Dm644 data/org.cadence.Cadence.desktop /app/share/applications/org.cadence.Cadence.desktop
       - install -Dm644 data/org.cadence.Cadence.metainfo.xml /app/share/metainfo/org.cadence.Cadence.metainfo.xml

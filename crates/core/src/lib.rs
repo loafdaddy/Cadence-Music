@@ -43,3 +43,6 @@ pub const APP_ID: &str = "org.cadence.Cadence";
 
 /// Human-readable application name.
 pub const APP_NAME: &str = "Cadence";
+
+/// Wordmark used in the header (“Cadence.”).
+pub const APP_WORDMARK: &str = "Cadence.";

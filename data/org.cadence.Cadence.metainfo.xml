@@ -8,12 +8,17 @@
   <developer_name>The Cadence Contributors</developer_name>
   <url type="homepage">https://github.com/loafdaddy/Cadence-Music</url>
   <url type="bugtracker">https://github.com/loafdaddy/Cadence-Music/issues</url>
+  <url type="contribute">https://github.com/loafdaddy/Cadence-Music/blob/main/CONTRIBUTING.md</url>
   <description>
     <p>
-      Cadence is a lightweight GTK4 music library application for Linux.
-      It focuses on local files, native performance, and GNOME human interface guidelines.
+      Cadence is a lightweight GTK4 music library for Linux: local files, native
+      performance, and GNOME human interface guidelines. No Electron.
     </p>
-    <p>Features include library scanning, browsing, search, playlists, playback, and metadata tools.</p>
+    <p>
+      This is an early public beta. Library scanning, browsing, search, playlists,
+      playback, organise, and metadata tools are available; expect rough edges.
+      Contributions are welcome.
+    </p>
   </description>
   <launchable type="desktop-id">org.cadence.Cadence.desktop</launchable>
   <provides>
@@ -33,9 +38,15 @@
   </recommends>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="0.1.0" date="2026-07-18">
+    <release version="0.1.0" date="2026-07-19" type="development">
       <description>
-        <p>Initial MVP release.</p>
+        <p>First public beta Flatpak.</p>
+        <ul>
+          <li>Library scan with add/remove reconcile and orphan pruning</li>
+          <li>Organise as Artist/Album or Artist/Singles</li>
+          <li>Compact playback dock, Now Playing, MPRIS basics</li>
+          <li>Cadence. wordmark and app icon</li>
+        </ul>
       </description>
     </release>
   </releases>

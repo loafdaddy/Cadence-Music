@@ -6,8 +6,15 @@ Cargo.lock.orig
 # Flatpak
 /.flatpak-builder
 /build
+/build-dir
+/.flatpak-repo
 /repo
 /build-aux/*.flatpak
+*.flatpak
+
+# Local env helpers (machine-specific)
+.envrc.build
+.envrc
 
 # Editor / OS
 *.swp
