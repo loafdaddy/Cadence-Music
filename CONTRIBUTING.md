@@ -68,6 +68,19 @@ Status of features: [docs/TODO.md](docs/TODO.md). Do not claim something done un
 - UI polish that fits Adwaita (no Electron-style chrome)
 - Finishing items under **Next** in `docs/TODO.md` (portraits, MPRIS honesty, playlist/queue UX)
 
+## AI-assisted contributions
+
+**AI tools are welcome.** You can use Cursor, Copilot, ChatGPT, Claude, or similar to help write code, docs, tests, or Flatpak packaging.
+
+A few expectations so reviews stay useful:
+
+- You understand and stand behind the change — if asked, you can explain what it does and why
+- You have built and/or run the relevant bits (or say clearly what you could not verify)
+- Do not paste large generated dumps that rewrite unrelated files
+- Prefer small PRs; call out in the description if AI helped in a substantial way (optional but appreciated)
+
+Parts of Cadence itself may have been written or edited with AI assistance. That is intentional for an early project moving quickly. Human review still applies to every merge.
+
 ## Code style
 
 - Prefer small, focused PRs

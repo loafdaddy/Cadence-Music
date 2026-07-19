@@ -80,6 +80,8 @@ We want help. Good first steps:
 
 No contribution is too small — docs and Flatpak testing count.
 
+**AI-assisted work is welcome** (Cursor, Copilot, chat models, etc.). You remain responsible for the change: understand it, keep PRs focused, and verify what you can. See the [AI section in CONTRIBUTING.md](CONTRIBUTING.md#ai-assisted-contributions). Parts of this repo may already include AI-assisted edits.
+
 ## Architecture
 
 | Crate | Role |
