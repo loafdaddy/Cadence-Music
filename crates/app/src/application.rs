@@ -3,7 +3,7 @@
 use std::path::PathBuf;
 
 use adw::prelude::*;
-use cadence_core::{APP_ID, APP_NAME};
+use cadence_core::{APP_ID, APP_WORDMARK};
 use gtk::gio;
 use gtk::glib;
 
@@ -44,22 +44,33 @@ pub fn run() -> glib::ExitCode {
         let app = app.clone();
         about.connect_activate(move |_, _| {
             let mut builder = adw::AboutWindow::builder()
-                .application_name(APP_NAME)
+                .application_name(APP_WORDMARK)
                 .application_icon(APP_ID)
                 .developer_name("The Cadence Contributors")
                 .version(env!("CARGO_PKG_VERSION"))
                 .comments(
                     "A modern, native music library for Linux.\n\
+                     GTK4 · libadwaita · offline-first\n\
                      Early public beta — contributions welcome.",
                 )
                 .license_type(gtk::License::Gpl30)
                 .website("https://github.com/loafdaddy/Cadence-Music")
                 .issue_url("https://github.com/loafdaddy/Cadence-Music/issues")
+                .copyright("© The Cadence Contributors")
                 .modal(true);
             if let Some(parent) = app.active_window() {
                 builder = builder.transient_for(&parent);
             }
-            builder.build().present();
+            let window = builder.build();
+            window.add_link(
+                "Brand kit",
+                "https://github.com/loafdaddy/Cadence-Music/tree/main/data/brand",
+            );
+            window.add_link(
+                "Documentation",
+                "https://github.com/loafdaddy/Cadence-Music/blob/main/docs/README.md",
+            );
+            window.present();
         });
     }
     app.add_action(&about);

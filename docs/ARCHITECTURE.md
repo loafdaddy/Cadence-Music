@@ -1,11 +1,26 @@
-# Cadence — Architecture
+# Architecture
+
+Cadence is a native Linux desktop app: a GTK4 / libadwaita UI over a SQLite-backed library engine, with GStreamer for playback.
 
 ## Crates
 
 | Crate | Path | Role |
 |-------|------|------|
-| `cadence-core` | `crates/core` | SQLite library DB, scanner, folder watcher, tag I/O (lofty), artwork cache, organise planner, MusicBrainz / CAA lookup |
-| `cadence` | `crates/app` | GTK4 / libadwaita UI, GStreamer playback, queue, MPRIS |
+| `cadence-core` | [`crates/core`](../crates/core) | SQLite library DB, scanner, folder watcher, tag I/O (lofty), artwork cache, organise planner, MusicBrainz / CAA lookup |
+| `cadence` | [`crates/app`](../crates/app) | GTK4 / libadwaita UI, GStreamer playback, queue, MPRIS |
+
+## Runtime flow
+
+```text
+Startup
+   |
+   v
+LibraryService worker  <--- MPSC commands ---  GTK main context
+   |                                              |
+   +--> SQLite + scanner / watcher                +--> widgets / toasts
+   +--> tag I/O, artwork, organise                +--> GStreamer bus watch
+                                                  +--> MPRIS
+```
 
 ## UI threading model
 
@@ -16,12 +31,12 @@
 
 ## Shell layout
 
-```
+```text
 ApplicationWindow
 └─ ToastOverlay
    └─ Overlay
       ├─ ToolbarView
-      │  ├─ HeaderBar (search, add folder, menu)
+      │  ├─ HeaderBar (brand, search, add folder, menu)
       │  └─ Library shell
       │     ├─ Banner (scan progress)
       │     ├─ Nav | [Master] | Detail stack
@@ -33,7 +48,7 @@ ApplicationWindow
 - **Dock:** permanent compact player (~96px). Artwork is clipped and scaled; it must never change dock height.
 - **Now Playing:** immersive overlay revealed from the dock artwork; not the default chrome.
 - **App menu:** Preferences, Scan Library, Organise Library, Edit / Lookup Metadata, Undo Organisation, About, Quit.
-- **Header brand:** app icon + wordmark **Cadence.** (serif stack, purple period).
+- **Header brand:** app icon + wordmark **Cadence.** (Cantarell / Adwaita Sans, purple period).
 - **Home actions:** Organise Files and Find Missing Metadata (Scan lives in the menu only).
 - **Lookup progress:** header spinner + tooltip (not the scan Banner).
 
@@ -65,10 +80,10 @@ ApplicationWindow
 
 ## Flatpak
 
-- Manifest: `build-aux/org.cadence.Cadence.yml`
+- Manifest: [`build-aux/org.cadence.Cadence.yml`](../build-aux/org.cadence.Cadence.yml)
 - Local beta install: `./scripts/build-flatpak.sh` then `flatpak run org.cadence.Cadence`
 - Runtime: GNOME 49; owns `org.mpris.MediaPlayer2.Cadence`
 - Release `.flatpak` is app-only; export with Flathub `--runtime-repo` via `scripts/build-flatpak.sh`
 - Default music access: `xdg-music:rw`; other locations rely on document portal grants when chosen via `FileDialog`
 - Finish-args also declare FileChooser, Documents, Notification, and OpenURI portals (Notification unused so far)
-- Not on Flathub yet — see [INSTALL.md](INSTALL.md)
+- Not on Flathub yet — see [SETUP.md](../SETUP.md)

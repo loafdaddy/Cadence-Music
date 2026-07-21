@@ -12,7 +12,8 @@
   <description>
     <p>
       Cadence is a lightweight GTK4 music library for Linux: local files, native
-      performance, and GNOME human interface guidelines. No Electron.
+      performance, and GNOME human interface guidelines. Wayland-first,
+      Flatpak-friendly, no Electron.
     </p>
     <p>
       This is an early public beta. Library scanning, browsing, search, playlists,

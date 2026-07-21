@@ -25,7 +25,7 @@ cargo run -p cadence
 # or after building: ./scripts/run-debug.sh
 ```
 
-See [docs/INSTALL.md](docs/INSTALL.md) for Flatpak and troubleshooting.
+See [SETUP.md](SETUP.md) for Flatpak and troubleshooting.
 
 ## Development loop
 
@@ -56,11 +56,13 @@ Typical change flow:
 | `crates/app` | GTK UI, playback, MPRIS, library worker bridge |
 | `data/` | Desktop entry, metainfo, icons, brand SVGs |
 | `build-aux/` | Flatpak manifest |
-| `docs/` | Install, architecture, roadmap, TODO |
+| `docs/` | Architecture, roadmap, TODO, FAQ, releases |
+| `SETUP.md` | Install: Flatpak and from-source |
 | `scripts/` | Helper scripts (Flatpak build, debug run) |
 
-Status of features: [docs/TODO.md](docs/TODO.md). Do not claim something done unless it works in the running app.
-Releases: [docs/RELEASES.md](docs/RELEASES.md).
+Status of features: [docs/TODO.md](docs/TODO.md). Do not claim something done unless it works in the running app.  
+Releases: [docs/RELEASES.md](docs/RELEASES.md).  
+Docs index: [docs/README.md](docs/README.md).
 
 ## What we need most right now
 
@@ -87,12 +89,14 @@ Parts of Cadence itself may have been written or edited with AI assistance. That
 - Prefer small, focused PRs
 - Match existing naming and module layout
 - Avoid drive-by refactors unrelated to the change
-- No emoji in docs or UI strings
+- No emoji in **UI strings**; README feature lists may use emoji for scannability
 - GPL-3.0-or-later for contributions (same as the project)
 
 ## Brand
 
-App icon and wordmark live under `data/brand/` and `data/icons/`. Visual direction is dark + purple accent with the wordmark **Cadence.** — see `data/brand/README.md`.
+App icon and wordmark live under `data/brand/` and `data/icons/`. Visual direction is dark + purple accent with the wordmark **Cadence.** — see [data/brand/README.md](data/brand/README.md).
+
+Keep Cadence purple; do not restyle toward Discoverr’s teal. Sibling studio language (dark tile, accent period, Cantarell lockup) is intentional.
 
 ## Communication
 

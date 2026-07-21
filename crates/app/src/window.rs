@@ -359,6 +359,7 @@ impl CadenceWindow {
 fn brand_widget() -> gtk::Box {
     let icon = gtk::Image::from_icon_name(cadence_core::APP_ID);
     icon.set_pixel_size(28);
+    icon.set_tooltip_text(Some(cadence_core::APP_WORDMARK));
     icon.add_css_class("cadence-brand-icon");
 
     let name = gtk::Label::builder()
@@ -366,12 +367,14 @@ fn brand_widget() -> gtk::Box {
         .label("Cadence<span foreground=\"#A882FF\">.</span>")
         .css_classes(["cadence-brand"])
         .valign(gtk::Align::Center)
+        .tooltip_text(cadence_core::APP_WORDMARK)
         .build();
 
     let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
     row.add_css_class("cadence-brand-row");
     row.set_margin_start(4);
     row.set_margin_end(8);
+    row.set_tooltip_text(Some(cadence_core::APP_WORDMARK));
     row.append(&icon);
     row.append(&name);
     row

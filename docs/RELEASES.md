@@ -20,13 +20,13 @@ Pre-1.0: expect breaking changes in minor releases. Mark development/beta builds
 
 1. Update version in `Cargo.toml` (`[workspace.package] version`)
 2. Add a matching `<release>` entry in `data/org.cadence.Cadence.metainfo.xml`
-3. Add a section below in this file; bump version mentions in `README.md` / `docs/INSTALL.md` if needed
+3. Add a section below in this file; bump version mentions in `README.md` / `SETUP.md` if needed
 4. Commit on `main` (or merge the release PR)
 5. Tag: `git tag -a v0.1.1 -m "Cadence 0.1.1"`
 6. Push: `git push origin main --tags`
 7. Create the GitHub release (notes can mirror the section below)
 8. Attach the Flatpak bundle:
-   - Ensure Flathub runtimes for the manifest are installed (`org.gnome.Platform` / `Sdk` + `rust-stable` — see [INSTALL.md](INSTALL.md))
+   - Ensure Flathub runtimes for the manifest are installed (`org.gnome.Platform` / `Sdk` + `rust-stable` — see [SETUP.md](../SETUP.md))
    - Run `./scripts/build-flatpak.sh` — this installs locally **and** writes `cadence-<version>.flatpak` with `--runtime-repo` pointing at Flathub
    - Upload that `.flatpak` on the GitHub release
 9. Sanity-check on a machine that does **not** already have the app: Flathub remote + Platform install (once), then `flatpak install --user ./cadence-<version>.flatpak`
@@ -62,7 +62,7 @@ flatpak install --user ./cadence-0.1.1.flatpak
 flatpak run org.cadence.Cadence
 ```
 
-- From source / local Flatpak build: see [INSTALL.md](INSTALL.md)
+- From source / local Flatpak build: see [SETUP.md](../SETUP.md)
 - GitHub: https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1
 
 **Known gaps:** see [TODO.md](TODO.md)
@@ -82,7 +82,7 @@ flatpak run org.cadence.Cadence
 
 **Install**
 - Prefer **0.1.1** — the 0.1.0 bundle targets EOL GNOME Platform 48 and fails on clean machines
-- From source: see [INSTALL.md](INSTALL.md)
+- From source: see [SETUP.md](../SETUP.md)
 - GitHub: https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0
 
 **Known gaps:** see [TODO.md](TODO.md) (queue UI, playlist delete/rename, MPRIS pause status, portraits, etc.)

@@ -2,7 +2,7 @@
 
 Single living status list. Keep it honest: only check items when verified in the running app.
 
-Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md) · [INSTALL.md](INSTALL.md) · [RELEASES.md](RELEASES.md) · [CONTRIBUTING.md](../CONTRIBUTING.md)
+Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md) · [SETUP.md](../SETUP.md) · [RELEASES.md](RELEASES.md) · [CONTRIBUTING.md](../CONTRIBUTING.md) · [FAQ.md](FAQ.md)
 
 ---
 
@@ -33,8 +33,9 @@ Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [ROADMAP.md](ROADMAP.md) · [INST
 
 ### Docs hygiene
 - [x] README and docs match implementation (no separate spec checklist)
-- [x] CONTRIBUTING + INSTALL for Flatpak beta and from-source development
+- [x] CONTRIBUTING + SETUP for Flatpak beta and from-source development
 - [x] Cadence. wordmark in header; brand SVGs for GitHub README
+- [x] Studio-aligned docs layout (docs index, FAQ, SETUP, brand kit)
 
 ---
 

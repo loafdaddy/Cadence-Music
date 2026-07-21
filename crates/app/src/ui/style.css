@@ -1,18 +1,15 @@
-/* Cadence — restrained polish on Adwaita */
-
-.cadence-brand-row {
-  margin-end: 4px;
-}
+/* Cadence — restrained polish on Adwaita
+   Brand accent: #A882FF (see data/brand/README.md) */
 
 .cadence-brand-icon {
   margin-top: 1px;
 }
 
 .cadence-brand {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-family: "Cantarell Extra Bold", Cantarell, "Adwaita Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
 }
 
 .cadence-player {

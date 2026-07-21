@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Cadence
 GenericName=Music Player
-Comment=A modern, native music library for Linux (early beta)
+Comment=A modern, native music library for Linux
 Exec=cadence
 Icon=org.cadence.Cadence
 Terminal=false
