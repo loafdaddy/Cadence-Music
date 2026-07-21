@@ -50,7 +50,7 @@ Most music apps on Linux are either Electron shells or half-finished side projec
 - ⌨️ MPRIS media keys (play / pause / next / previous)
 - 📦 Flatpak-friendly packaging
 
-Architecture details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+How it works (for contributors): [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Screenshots
 
@@ -88,7 +88,7 @@ Not on Flathub yet — GitHub release bundles and local builds only.
 | Doc | What it covers |
 |-----|----------------|
 | **[SETUP.md](SETUP.md)** | Install: Flatpak bundle, Flatpak from clone, from-source |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Crates, threading, shell layout |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Full technical guide for contributors |
 | [docs/RELEASES.md](docs/RELEASES.md) | Version history and how to cut a release |
 | [docs/TODO.md](docs/TODO.md) / [docs/ROADMAP.md](docs/ROADMAP.md) | Status and direction |
 | [docs/FAQ.md](docs/FAQ.md) | Common questions |

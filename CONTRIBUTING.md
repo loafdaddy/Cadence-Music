@@ -48,6 +48,10 @@ Typical change flow:
 3. Run tests / clippy where relevant
 4. Open a pull request against `main` with a short “why” in the description
 
+## How Cadence works
+
+Read **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** before larger changes. It covers crates, the library worker thread, database/FTS, scanner, UI shell, playback/MPRIS, and contributor invariants.
+
 ## Project map
 
 | Path | What it is |
@@ -56,7 +60,7 @@ Typical change flow:
 | `crates/app` | GTK UI, playback, MPRIS, library worker bridge |
 | `data/` | Desktop entry, metainfo, icons, brand SVGs |
 | `build-aux/` | Flatpak manifest |
-| `docs/` | Architecture, roadmap, TODO, FAQ, releases |
+| `docs/` | Architecture guide, roadmap, TODO, FAQ, releases |
 | `SETUP.md` | Install: Flatpak and from-source |
 | `scripts/` | Helper scripts (Flatpak build, debug run) |
 

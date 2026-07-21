@@ -156,7 +156,7 @@ Organisation (rename on disk) only runs when you ask via **Organise Library**.
 | Doc | What it covers |
 |-----|----------------|
 | [README.md](README.md) | Overview and quick start |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Crates and threading |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Full technical guide for contributors |
 | [docs/RELEASES.md](docs/RELEASES.md) | Version history |
 | [docs/TODO.md](docs/TODO.md) / [docs/ROADMAP.md](docs/ROADMAP.md) | Status and direction |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor workflow |

@@ -4,7 +4,7 @@
 |-----|----------|
 | [../README.md](../README.md) | Short overview + quick start; links out |
 | [../SETUP.md](../SETUP.md) | Full install: Flatpak bundle, Flatpak from clone, from-source |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Crates, threading, shell layout, Flatpak notes |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Full technical guide: crates, threads, DB, UI, playback, how to contribute |
 | [assets/](assets/) | Screenshots used in README |
 | [RELEASES.md](RELEASES.md) | SemVer history and how to cut a release |
 | [ROADMAP.md](ROADMAP.md) | Direction and milestones |
