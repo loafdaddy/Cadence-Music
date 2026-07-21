@@ -22,6 +22,7 @@ Stay a **small native music library**: local files, calm GNOME UI, honest playba
 - **Milestone 4** — polish (dock height, context menus, docs)
 - **v0.1.0** — first public beta — see [RELEASES.md](RELEASES.md)
 - **v0.1.1** — Flatpak clean-install fix (GNOME 49) — see [RELEASES.md](RELEASES.md)
+- **v0.1.2** — studio branding + docs polish — see [RELEASES.md](RELEASES.md)
 - **Next** — items under **Next** in [TODO.md](TODO.md)
 
 ## Non-goals (for now)

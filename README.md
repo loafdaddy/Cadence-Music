@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1">v0.1.1</a>
+  <a href="https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.2">v0.1.2</a>
   ·
   <a href="SETUP.md">Setup</a>
   ·
@@ -30,7 +30,7 @@
 
 Cadence is a lightweight GTK4 music library for local files. Wayland-first, Flatpak-friendly, no Electron — built to feel like it could ship with Fedora Workstation.
 
-This is an **early public beta** (**v0.1.1**). Features work, but expect rough edges. **Contributors are very welcome** — design, Rust, packaging, docs, and bug reports all help.
+This is an **early public beta** (**v0.1.2**). Features work, but expect rough edges. **Contributors are very welcome** — design, Rust, packaging, docs, and bug reports all help.
 
 > Windows Media Player (Windows 7 era) + GNOME HIG + modern design + native Linux performance.
 
@@ -73,9 +73,9 @@ Architecture details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user -y org.gnome.Platform//49
 
-# Download cadence-0.1.1.flatpak from:
-# https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1
-flatpak install --user ./cadence-0.1.1.flatpak
+# Download cadence-0.1.2.flatpak from:
+# https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.2
+flatpak install --user ./cadence-0.1.2.flatpak
 flatpak run org.cadence.Cadence
 ```
 
@@ -167,7 +167,8 @@ Published builds and notes live on GitHub and in [docs/RELEASES.md](docs/RELEASE
 
 | Version | Date | Notes |
 |---------|------|-------|
-| **[0.1.1](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1)** | 2026-07-19 | Flatpak clean-install fix (GNOME 49) |
+| **[0.1.2](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.2)** | 2026-07-21 | Studio branding + docs polish |
+| [0.1.1](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1) | 2026-07-19 | Flatpak clean-install fix (GNOME 49) |
 | [0.1.0](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.0) | 2026-07-19 | First public beta (Flatpak superseded) |
 
 ## FAQ

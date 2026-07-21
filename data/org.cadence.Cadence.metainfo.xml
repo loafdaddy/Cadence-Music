@@ -39,6 +39,16 @@
   </recommends>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="0.1.2" date="2026-07-21" type="development">
+      <description>
+        <p>Studio branding and documentation polish.</p>
+        <ul>
+          <li>Refreshed Cadence. lockup, mark, and in-app wordmark</li>
+          <li>Empty state and About dialog show the brand icon</li>
+          <li>README and docs aligned with the studio layout (SETUP, FAQ, docs index)</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.1" date="2026-07-19" type="development">
       <description>
         <p>Flatpak install fix for clean machines.</p>

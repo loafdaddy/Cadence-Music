@@ -2,7 +2,7 @@
 
 Track every published version here. Update this file when cutting a release, then tag and publish on GitHub.
 
-Current version in tree: **0.1.1** (`Cargo.toml` workspace package + AppStream metainfo).
+Current version in tree: **0.1.2** (`Cargo.toml` workspace package + AppStream metainfo).
 
 ## Versioning
 
@@ -39,6 +39,35 @@ Pre-1.0: expect breaking changes in minor releases. Mark development/beta builds
 - Keep the manifest on a **supported** GNOME runtime (not EOL). EOL platforms disappear from Flathub and break new installs.
 
 ## Releases
+
+### 0.1.2 — 2026-07-21 (studio branding + docs)
+
+**Status:** early public beta · not on Flathub yet
+
+**Highlights**
+- Refreshed **Cadence.** brand kit (Cantarell Extra Bold lockup, mark, social banner)
+- In-app branding: header wordmark typography, empty-state icon, About dialog links
+- Documentation restructured to match the studio layout — root [SETUP.md](../SETUP.md), [docs/README.md](README.md), [FAQ.md](FAQ.md)
+- Fixed invalid GTK CSS `margin-end` warning from the brand row stylesheet
+
+**Install**
+- Flatpak bundle: download `cadence-0.1.2.flatpak` from the [GitHub release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.2)
+- Prefer the terminal (`--user`). In Software, pick the **USER** target if offered.
+- One-time runtime (if needed):
+
+```bash
+flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install --user -y org.gnome.Platform//49
+flatpak install --user ./cadence-0.1.2.flatpak
+flatpak run org.cadence.Cadence
+```
+
+- From source / local Flatpak build: see [SETUP.md](../SETUP.md)
+- GitHub: https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.2
+
+**Known gaps:** see [TODO.md](TODO.md)
+
+**AI note:** Parts of this release were developed with AI assistance. AI-assisted contributions remain welcome — see [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ### 0.1.1 — 2026-07-19 (Flatpak clean-install fix)
 

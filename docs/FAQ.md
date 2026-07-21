@@ -8,7 +8,7 @@ Short answers for operators and contributors. Install steps: [SETUP.md](../SETUP
 A native GTK4 / libadwaita music library for local files on Linux. Offline-first, Flatpak-friendly, no Electron.
 
 **Is this production-ready?**  
-No — **early public beta** (**v0.1.1**). Core browse/play/scan paths work; expect rough edges. See [TODO.md](TODO.md).
+No — **early public beta** (**v0.1.2**). Core browse/play/scan paths work; expect rough edges. See [TODO.md](TODO.md).
 
 **Is Cadence on Flathub?**  
 Not yet. Use the GitHub release `.flatpak` or build from source.

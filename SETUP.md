@@ -2,7 +2,7 @@
 
 Step-by-step install for Cadence. Short overview: [README.md](README.md). Docs index: [docs/README.md](docs/README.md).
 
-Cadence is an **early public beta** (**v0.1.1**). Prefer the release Flatpak bundle to try it; use a source checkout when you want to change code.
+Cadence is an **early public beta** (**v0.1.2**). Prefer the release Flatpak bundle to try it; use a source checkout when you want to change code.
 
 ## Flatpak bundle (personal use)
 
@@ -18,11 +18,11 @@ flatpak install --user -y org.gnome.Platform//49
 
 ### 2. Install the release bundle
 
-1. Download `cadence-0.1.1.flatpak` from the [v0.1.1 release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.1)
+1. Download `cadence-0.1.2.flatpak` from the [v0.1.2 release](https://github.com/loafdaddy/Cadence-Music/releases/tag/v0.1.2)
 2. Install and run:
 
 ```bash
-flatpak install --user ./cadence-0.1.1.flatpak
+flatpak install --user ./cadence-0.1.2.flatpak
 flatpak run org.cadence.Cadence
 ```
 
